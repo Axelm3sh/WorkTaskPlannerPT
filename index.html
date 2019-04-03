@@ -1,48 +1,72 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TWORKER</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="Styles/style.css">
     <link rel="stylesheet" href="Styles/ColorContainers.css">
+
 </head>
 
 <body>
 
-<!--    Top White bar for login and notifies-->
-    <nav>
-<!-- This list should be centered -->
-        <ul>
-            <li>MoveLeftArrow</li>
-            <li>Weekday Text</li>
-            <li>MoveRightArrow</li>
+    <!--    Top White bar for login and notifies-->
+    <nav class="navbar">
+        <!-- This list should be centered -->
+        <ul class="nav mx-auto justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link"><span class="fa fa-arrow-circle-left "></span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">Weekday Text</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"><span class="fa fa-arrow-circle-right"></span></a>
+            </li>
         </ul>
-        
-<!--        User login icon and notification-->
-        <div>
-            <img alt="notification button" src="http://lorempixel.com/40/40/abstract">
-            <img alt="account button" src="http://lorempixel.com/40/40/abstract">
-        </div>
-    </nav>
-    
-<!--   A Container for all the main weekday stuff-->
-    <div id="WeekdayContainer" class="WeekFlex">
 
-<!--        Magical stuff here loaded from Template01.html-->
-        
-        
-        
-        
+        <!--        User login icon and notification-->
+        <div class="nav justify-content-right">
+            <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
+            <button type="button" class="btn btn-outline-secondary btn-sm">
+                <span class="fa fa-comment badge badge-danger"> 9</span>
+            </button>
+
+            <!--            User Icon which toggles a dropdown for generic user options-->
+            <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
+                <img alt="account button" src="http://lorempixel.com/40/40/abstract">
+            </a>
+            <!--Dropdown menu for use with the user icon-->
+            <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
+                <a class="dropdown-item" href="#">Option 1</a>
+                <a class="dropdown-item" href="#">Option 2</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Logout</a>
+            </div>
+        </div>
+
+    </nav>
+
+    <!--   A Container for all the main weekday stuff-->
+    <div class="WeekFlex" id="WeekdayContainer">
+
+        <!--        Magical stuff here loaded from Template01.html-->
+
+
+
+
     </div>
 
 
 
-
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Bootstrap+JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="Scripts/PageManager.js"></script>
 </body>
 
-</html>
+<footer></footer></html>
