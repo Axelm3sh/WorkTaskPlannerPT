@@ -1,6 +1,8 @@
 //$-prefix variables are Jquery objects, you can use this variable to do Jquery functions on the doc
 var $docObj = $(document.body);
 var $WeekdayContainer = $("#WeekdayContainer");
+
+//color arrays
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
 
@@ -24,7 +26,15 @@ clickActions["notification"] = function (e) {
     alert("You clicked on notifications!");
 }
 
+clickActions["next-week"] = function (e) {
+    alert("You clicked on next week!");
+}
 
+clickActions["prev-week"] = function (e) {
+    alert("You clicked on prev week!");
+}
+
+//Day Column Expand/Contract function
 clickActions["daySlot"] = function (e) {
     console.log("day slot clicked: " + e.currentTarget);
     
