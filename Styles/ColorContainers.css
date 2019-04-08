@@ -13,7 +13,7 @@
 
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: stretch;
 
 /*
@@ -29,7 +29,8 @@
     box-shadow: 3px 0px 3px;
     /*drop shadow to the right to overlap right item*/
     
-    
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .expandedCol {
@@ -37,7 +38,8 @@
 }
 
 .shrinkCol {
-    width: 5%;
+    width: 1%;
+    min-width: 0;
 }
 
 /*Frame Top, Has the day text inside and a drop shadow plus darker shade than content area*/
@@ -60,4 +62,15 @@
     padding: 20px;
 
     opacity: 0.75;
+}
+
+/* Holds the abbreviated content */
+.contentShortContainer{
+    
+}
+
+/* Holds the full content */
+.contentExpandedContainer
+{
+    
 }

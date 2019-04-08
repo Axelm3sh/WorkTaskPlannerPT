@@ -7,8 +7,8 @@ var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
 
 
-//universal click handler functionality, 
-//just add a: data-click="actionName" attribute to the element.
+//*******Universal click handler functionality, 
+//just add a: data-click="actionName" attribute to the element.*******/
 var clickActions = {};
 //catch all click events
 $docObj.on("click", "*", function (elem) {
@@ -20,7 +20,27 @@ $docObj.on("click", "*", function (elem) {
         clickActions[actionName].call(this, elem);
     }
 });
+//END Universal Click handler
 
+//JQUERY ready is similar to window.onload except it occurs earlier
+$docObj.ready(function () {
+    console.log("Page has loaded!");
+    //    alert("Page loaded, welcome!");
+    
+    //Not working yet
+//    var now = dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT");
+//    $("currentWeek").html(now);
+    
+    loadTemplate();
+
+});
+
+//default DOM event occurs when images and everything is loaded, not needed most likely
+window.onload = function () {
+    //postColorFix();
+};
+
+//************Click Actions**********
 //example, look at index.html nav notification button
 clickActions["notification"] = function (e) {
     alert("You clicked on notifications!");
@@ -28,10 +48,14 @@ clickActions["notification"] = function (e) {
 
 clickActions["next-week"] = function (e) {
     alert("You clicked on next week!");
+    clearWeekSlots();
+    loadTemplate();
 }
 
 clickActions["prev-week"] = function (e) {
     alert("You clicked on prev week!");
+    clearWeekSlots();
+    loadTemplate();
 }
 
 //Day Column Expand/Contract function
@@ -63,18 +87,7 @@ clickActions["daySlot"] = function (e) {
 
 }
 
-//JQUERY ready is similar to window.onload except it occurs earlier
-$docObj.ready(function () {
-    console.log("Page has loaded!");
-    //    alert("Page loaded, welcome!");
-    loadTemplate();
 
-});
-
-//default DOM event occurs when images and everything is loaded
-window.onload = function () {
-    //postColorFix();
-};
 
 
 function loadTemplate() {
@@ -123,6 +136,11 @@ function loadTemplate() {
 
 }
 
+function clearWeekSlots()
+{
+    $WeekdayContainer.empty();
+}
+
 //Quick visual for "loading in" the app
 function fadeInElement(param) {
     //IDE intellisense tip, function was expecting a Jquery object but 
@@ -139,7 +157,35 @@ function fadeInElement(param) {
 function postColorFix() {
 
     $WeekdayContainer.find(".colorFrameTop").each(function (index) {
-        $(this).css("background-color", defaultColorAR[index]);
+        var $top = $(this);
+        
+        $top.css("background-color", defaultColorAR[index]);
+        //load the day names for the week
+        switch(index)
+            {
+                case 0:
+                    $top.html("SUNDAY");
+                    break;
+                case 1:
+                    $top.html("MONDAY");
+                    break;
+                case 2:
+                    $top.html("TUESDAY");
+                    break;
+                case 3:
+                    $top.html("WEDNESDAY");
+                    break;
+                case 4:
+                    $top.html("THURSDAY");
+                    break;
+                case 5:
+                    $top.html("FRIDAY");
+                    break;
+                case 6: 
+                    $top.html("SATURDAY");
+                    break;
+                default: console.log("Invalid Day!");
+            }
     });
 
     $WeekdayContainer.find(".colorFrameContent").each(function (index) {
