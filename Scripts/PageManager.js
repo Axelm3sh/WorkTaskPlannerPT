@@ -1,6 +1,10 @@
 //$-prefix variables are Jquery objects, you can use this variable to do Jquery functions on the doc
 var $docObj = $(document.body);
 var $WeekdayContainer = $("#WeekdayContainer");
+//Moment.js, gets us an object of the current date/time
+var momentCurrent = moment();
+var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
+
 
 //color arrays
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
@@ -27,9 +31,8 @@ $docObj.ready(function () {
     console.log("Page has loaded!");
     //    alert("Page loaded, welcome!");
     
-    //Not working yet
-//    var now = dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT");
-//    $("currentWeek").html(now);
+    //Display current date at the top of the week using a cloned object from Moment.js
+    displayWeekTop(momentInstance);
     
     loadTemplate();
 
@@ -47,13 +50,28 @@ clickActions["notification"] = function (e) {
 }
 
 clickActions["next-week"] = function (e) {
-    alert("You clicked on next week!");
+    //alert("You clicked on next week!");
+    
+    displayWeekTop(momentInstance.add(7, "days"));
+    
     clearWeekSlots();
     loadTemplate();
 }
 
 clickActions["prev-week"] = function (e) {
-    alert("You clicked on prev week!");
+    //alert("You clicked on prev week!");
+
+    displayWeekTop(momentInstance.subtract(7, "days"));
+    
+    clearWeekSlots();
+    loadTemplate();
+}
+
+clickActions["current-week"] = function (e) {
+    
+    displayWeekTop(momentCurrent);
+    
+    
     clearWeekSlots();
     loadTemplate();
 }
@@ -88,6 +106,15 @@ clickActions["daySlot"] = function (e) {
 }
 
 
+function displayWeekTop(dateObject)
+{
+    dateObject = dateObject || monent();
+    
+    //Using Moment.js
+    var now = moment(dateObject).utcOffset(0, true).format("Do of MMMM, YYYY");
+    $("#currentWeek").html(now);
+    
+}
 
 
 function loadTemplate() {
