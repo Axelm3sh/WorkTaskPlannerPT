@@ -47,7 +47,7 @@ window.onload = function () {
 //example, look at index.html nav notification button
 clickActions["notification"] = function (e) {
     alert("You clicked on notifications!");
-}
+};
 
 clickActions["next-week"] = function (e) {
     //alert("You clicked on next week!");
@@ -56,7 +56,7 @@ clickActions["next-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
-}
+};
 
 clickActions["prev-week"] = function (e) {
     //alert("You clicked on prev week!");
@@ -65,7 +65,7 @@ clickActions["prev-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
-}
+};
 
 clickActions["current-week"] = function (e) {
 
@@ -74,7 +74,7 @@ clickActions["current-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
-}
+};
 
 //Day Column Expand/Contract function
 clickActions["day-slot"] = function (e) {
@@ -91,16 +91,16 @@ clickActions["day-slot"] = function (e) {
         $target.find(".contentExpandedContainer").each(function (index) {
             $(this).data("visible", true); //data-visible is used for queries
             fadeInElement($(this));
-        })
+        });
 
         $target.find(".contentShortContainer").each(function (index) {
             $(this).data("visible", false);
             $(this).hide();
-        })
+        });
     }
 
 
-}
+};
 
 clickActions["exit-day-slot"] = function (e) {
     var $target = $(e.currentTarget);
@@ -117,15 +117,15 @@ clickActions["exit-day-slot"] = function (e) {
     $currSlot.find(".contentExpandedContainer").each(function (index) {
         $(this).hide();
         $(this).data("visible", false);
-    })
+    });
 
     $currSlot.find(".contentShortContainer").each(function (index) {
         fadeInElement($(this));
-    })
+    });
 
     //Stop it from bubbling up to "daySlot" event
     e.stopImmediatePropagation();
-}
+};
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
