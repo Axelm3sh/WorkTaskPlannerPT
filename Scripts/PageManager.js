@@ -30,10 +30,10 @@ $docObj.on("click", "*", function (elem) {
 $docObj.ready(function () {
     console.log("Page has loaded!");
     //    alert("Page loaded, welcome!");
-    
+
     //Display current date at the top of the week using a cloned object from Moment.js
     displayWeekTop(momentInstance);
-    
+
     loadTemplate();
 
 });
@@ -51,9 +51,9 @@ clickActions["notification"] = function (e) {
 
 clickActions["next-week"] = function (e) {
     //alert("You clicked on next week!");
-    
+
     displayWeekTop(momentInstance.add(7, "days"));
-    
+
     clearWeekSlots();
     loadTemplate();
 }
@@ -62,58 +62,118 @@ clickActions["prev-week"] = function (e) {
     //alert("You clicked on prev week!");
 
     displayWeekTop(momentInstance.subtract(7, "days"));
-    
+
     clearWeekSlots();
     loadTemplate();
 }
 
 clickActions["current-week"] = function (e) {
-    
+
     displayWeekTop(momentCurrent);
-    
-    
+
+
     clearWeekSlots();
     loadTemplate();
 }
 
 //Day Column Expand/Contract function
-clickActions["daySlot"] = function (e) {
+clickActions["day-slot"] = function (e) {
     console.log("day slot clicked: " + e.currentTarget);
-    
+
     //make JQuery obj from given element
     var $target = $(e.currentTarget) || $();
+
+    //Don't do anything if it has been already expanded
+    if (!$target.hasClass("expandedCol")) {
+        //toggleExpansion($target);
+        frameExpansion($target);
+
+        $target.find(".contentExpandedContainer").each(function (index) {
+            $(this).data("visible", true); //data-visible is used for queries
+            fadeInElement($(this));
+        })
+
+        $target.find(".contentShortContainer").each(function (index) {
+            $(this).data("visible", false);
+            $(this).hide();
+        })
+    }
+
+
+}
+
+clickActions["exit-day-slot"] = function (e) {
+    var $target = $(e.currentTarget);
+    console.log("slot exit clicked: " + e.currentTarget);
+
+    //search for Closest container
+    var $currSlot = $target.closest(".colorFrameBase");
+    console.log("slot exit parent is: " + $currSlot);
+    
+    //toggleExpansion($currSlot);
+    frameNormalizeAll();
+
+    //Find the expanded items and hide them
+    $currSlot.find(".contentExpandedContainer").each(function (index) {
+        $(this).hide();
+        $(this).data("visible", false);
+    })
+
+    $currSlot.find(".contentShortContainer").each(function (index) {
+        fadeInElement($(this));
+    })
+
+    //Stop it from bubbling up to "daySlot" event
+    e.stopImmediatePropagation();
+}
+
+//Auto expansion/normalization, given a ColorFrameBase
+function toggleExpansion(element) {
+    //trick IDE autocomplete
+    var $target = element || $();
+
+
+    //Check to see if we should expand or revert to normal
+    if ($target.hasClass("expandedCol")) {
+        frameNormalizeAll($target);
+    } else //convert single clicked row to expanded view
+    {
+        frameExpansion($target);
+    }
+}
+
+//reverts all columns to their normal view
+function frameNormalizeAll() {
+    //revert everything to default
+    $WeekdayContainer.find(".colorFrameBase").each(function (elem) {
+        $(this).removeClass("shrinkCol");
+        $(this).removeClass("expandedCol");
+    });
+}
+
+//convert single clicked column to expanded view
+function frameExpansion($target) {
+    $target = $target || $();
 
     //Shrink everything to smaller size
     $WeekdayContainer.find(".colorFrameBase").each(function (elem) {
         $(this).addClass("shrinkCol");
     });
 
-    //Check to see if we should expand or revert to normal
-    if ($target.hasClass("expandedCol")) 
-    {
-        //revert everything to default
-        $WeekdayContainer.find(".colorFrameBase").each(function (elem) {
-            $(this).removeClass("shrinkCol");
-            $(this).removeClass("expandedCol");
-        });
-    }
-    else //convert single clicked row to expanded view
-    { 
-        $target.removeClass("shrinkCol");
-        $target.addClass("expandedCol");
-    }
+    $target.removeClass("shrinkCol");
+    $target.addClass("expandedCol");
 
 }
 
 
-function displayWeekTop(dateObject)
-{
-    dateObject = dateObject || monent();
-    
+//Updates the top navbar area with the current date
+function displayWeekTop(dateObject) {
+    dateObject = dateObject || moment();
+
     //Using Moment.js
     var now = moment(dateObject).utcOffset(0, true).format("Do of MMMM, YYYY");
     $("#currentWeek").html(now);
-    
+
 }
 
 
@@ -129,7 +189,7 @@ function loadTemplate() {
     //Append divs with IDs containing daySlot followed by #
     for (var i = 1; i <= 7; i++) {
         //generated divs
-        var newHTML = "<div class=\"colorFrameBase card\" $ data-click=\"daySlot\"></div>";
+        var newHTML = $("#dayContainerTemplate").text();
         //ex: should be id="daySlot1"
         newHTML = newHTML.replace("$", "id=\"daySlot" + i + "\"");
 
@@ -160,12 +220,27 @@ function loadTemplate() {
     }
 
     postColorFix();
+    
+    initialHiddenElements();
 
 }
 
-function clearWeekSlots()
-{
+//Clears out the currently displayed day slots in preparation for a refresh, should only be called if we're switching weeks
+function clearWeekSlots() {
     $WeekdayContainer.empty();
+}
+
+function initialHiddenElements() {
+    //
+    $WeekdayContainer.find(".contentExpandedContainer").each(function (index) {
+
+        //if($(this).data("visible") == false)
+
+        //Hide these until we 
+        $(this).hide();
+        $(this).data("visible", false);
+
+    });
 }
 
 //Quick visual for "loading in" the app
@@ -174,45 +249,48 @@ function fadeInElement(param) {
     //we can trick it into thinking it's a Jquery object by setting it to itself OR empty Jquery object (can be extended to any object)
     param = param || $();
 
-    param.hide();
+    //param.hide();
     param.fadeIn("slow");
-    postColorFix();
+    //postColorFix();
 }
 
 //Fixes the colors of the frames once it loads
 //Maybe add a color selector thing down the line or parse colors from input
 function postColorFix() {
 
+    //raw text for slot exit button
+    var slotExitTemplate = $("#slotExitTemplate").text();
+
     $WeekdayContainer.find(".colorFrameTop").each(function (index) {
         var $top = $(this);
-        
+
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
-        switch(index)
-            {
-                case 0:
-                    $top.html("SUNDAY");
-                    break;
-                case 1:
-                    $top.html("MONDAY");
-                    break;
-                case 2:
-                    $top.html("TUESDAY");
-                    break;
-                case 3:
-                    $top.html("WEDNESDAY");
-                    break;
-                case 4:
-                    $top.html("THURSDAY");
-                    break;
-                case 5:
-                    $top.html("FRIDAY");
-                    break;
-                case 6: 
-                    $top.html("SATURDAY");
-                    break;
-                default: console.log("Invalid Day!");
-            }
+        switch (index) {
+            case 0:
+                $top.html("SUNDAY").append(slotExitTemplate);
+                break;
+            case 1:
+                $top.html("MONDAY").append(slotExitTemplate);
+                break;
+            case 2:
+                $top.html("TUESDAY").append(slotExitTemplate);
+                break;
+            case 3:
+                $top.html("WEDNESDAY").append(slotExitTemplate);
+                break;
+            case 4:
+                $top.html("THURSDAY").append(slotExitTemplate);
+                break;
+            case 5:
+                $top.html("FRIDAY").append(slotExitTemplate);
+                break;
+            case 6:
+                $top.html("SATURDAY").append(slotExitTemplate);
+                break;
+            default:
+                console.log("Invalid Day!");
+        }
     });
 
     $WeekdayContainer.find(".colorFrameContent").each(function (index) {
