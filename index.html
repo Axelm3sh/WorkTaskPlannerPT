@@ -74,6 +74,7 @@
     <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
     <script type="text/html" id="dayContainerTemplate">
         <div class="colorFrameBase card" $ data-click="day-slot"></div>
+
     </script>
 
     <script type="text/html" id="Template01">
@@ -85,8 +86,8 @@
             <div class="contentShortContainer" data-visible="true">My super cool abbreviated list of stuff will go here</div>
             <div class="dropdown-divider"></div>
             <!--            -->
-            <div class="contentExpandedContainer" data-visible="false">
-                <a data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
+            <div class="contentExpandedContainer float-right" data-visible="false">
+                <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
             </div>
         </div>
 
@@ -95,6 +96,14 @@
     <!--    Close slot button, should only be visible when -->
     <script type="text/html" id="slotExitTemplate">
         <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
+
+    </script>
+    
+    <!--    Item Add Template-->
+    <script type="text/html" id="itemTaskTemplate">
+        <div class="contentExpandedContainer" data-visible="false">
+            Test Item! Put Text Here.
+        </div>
 
     </script>
 

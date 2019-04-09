@@ -70,6 +70,9 @@ clickActions["prev-week"] = function (e) {
 clickActions["current-week"] = function (e) {
 
     displayWeekTop(momentCurrent);
+    
+    //Reset momentInstance via explicit clone because add/sub operations persist from other functions.
+    momentInstance = moment(momentCurrent);
 
 
     clearWeekSlots();
@@ -103,7 +106,7 @@ clickActions["day-slot"] = function (e) {
 };
 
 clickActions["exit-day-slot"] = function (e) {
-    var $target = $(e.currentTarget);
+    var $target = $(e.currentTarget) || $();
     console.log("slot exit clicked: " + e.currentTarget);
 
     //search for Closest container
@@ -125,6 +128,18 @@ clickActions["exit-day-slot"] = function (e) {
 
     //Stop it from bubbling up to "daySlot" event
     e.stopImmediatePropagation();
+};
+
+clickActions["add-item"] = function (e)
+{
+    var $target = $(e.currentTarget) || $();
+    
+    var itemTemplate = $("#itemTaskTemplate").text();
+    
+    $target.closest(".colorFrameContent").append(itemTemplate);
+    
+    e.stopImmediatePropagation();
+    
 };
 
 //Auto expansion/normalization, given a ColorFrameBase
