@@ -70,7 +70,7 @@ clickActions["prev-week"] = function (e) {
 clickActions["current-week"] = function (e) {
 
     displayWeekTop(momentCurrent);
-    
+
     //Reset momentInstance via explicit clone because add/sub operations persist from other functions.
     momentInstance = moment(momentCurrent);
 
@@ -87,7 +87,11 @@ clickActions["day-slot"] = function (e) {
     var $target = $(e.currentTarget) || $();
 
     //Don't do anything if it has been already expanded
-    if (!$target.hasClass("expandedCol")) {
+    if (!$target.hasClass("expandedCol")) 
+    {
+        //Normalize all in case they clicked on another slot
+        frameNormalizeAll();
+        
         //toggleExpansion($target);
         frameExpansion($target);
 
@@ -112,7 +116,7 @@ clickActions["exit-day-slot"] = function (e) {
     //search for Closest container
     var $currSlot = $target.closest(".colorFrameBase");
     console.log("slot exit parent is: " + $currSlot);
-    
+
     //toggleExpansion($currSlot);
     frameNormalizeAll();
 
@@ -122,6 +126,7 @@ clickActions["exit-day-slot"] = function (e) {
         $(this).data("visible", false);
     });
 
+    //fade back in the abbreviated list
     $currSlot.find(".contentShortContainer").each(function (index) {
         fadeInElement($(this));
     });
@@ -130,16 +135,15 @@ clickActions["exit-day-slot"] = function (e) {
     e.stopImmediatePropagation();
 };
 
-clickActions["add-item"] = function (e)
-{
+clickActions["add-item"] = function (e) {
     var $target = $(e.currentTarget) || $();
-    
+
     var itemTemplate = $("#itemTaskTemplate").text();
-    
+
     $target.closest(".colorFrameContent").append(itemTemplate);
-    
+
     e.stopImmediatePropagation();
-    
+
 };
 
 //Auto expansion/normalization, given a ColorFrameBase
@@ -164,6 +168,21 @@ function frameNormalizeAll() {
         $(this).removeClass("shrinkCol");
         $(this).removeClass("expandedCol");
     });
+
+    $WeekdayContainer.find(".colorFrameBase").each(function (elem) {
+        $(this).find(".contentShortContainer").each(function (i) {
+            $(this).fadeIn("fast");
+            $(this).data("visible", true);
+        });
+
+        $(this).find(".contentExpandedContainer").each(function (i) {
+            $(this).fadeOut("fast");
+            $(this).data("visible", false);
+        });
+
+    });
+
+
 }
 
 //convert single clicked column to expanded view
@@ -175,6 +194,7 @@ function frameExpansion($target) {
         $(this).addClass("shrinkCol");
     });
 
+    //remove shrink from target and only keep expand
     $target.removeClass("shrinkCol");
     $target.addClass("expandedCol");
 
@@ -235,7 +255,7 @@ function loadTemplate() {
     }
 
     postColorFix();
-    
+
     initialHiddenElements();
 
 }
