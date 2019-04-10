@@ -21,7 +21,7 @@ td a:hover {
 }
 
 .banner h3 {
-    margin: auto auto auto 10px;
+    margin: auto auto auto 20px;
 }
 
 form {
@@ -53,7 +53,7 @@ form {
     background-color: #FFFFFF;
     width: 20em;
     padding: 30px;
-    margin: 50px;
+    margin: 50px 50px auto auto;
     border-radius: 15px;
 }
 
@@ -73,5 +73,21 @@ form {
     background-color: #1E5793;
     border-color: #1E5793;
     color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.acc-recover {
+    width: 500px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    padding: 30px;
+    margin: auto;
+}
+
+.forgot-email-btn {
+    background-color: #1E5793;
+    color: #FFFFFF;
+    padding: 10px;
+    margin: 0 auto;
     border-radius: 5px;
 }
