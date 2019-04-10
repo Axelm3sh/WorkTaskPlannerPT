@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TWORKER</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="Styles/ColorContainers.css">
+
+</head>
+
+<body>
+
+    <!--    Top White bar for login and notifies-->
+    <nav class="navbar">
+        <!-- This list should be centered -->
+        <ul class="nav mx-auto justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" data-click="prev-week"><span class="fa fa-arrow-circle-left "></span></a>
+            </li>
+            <li class="nav-item">
+                <a id="currentWeek" data-click="current-week" class="nav-link">Weekday Text</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-click="next-week"><span class="fa fa-arrow-circle-right"></span></a>
+            </li>
+        </ul>
+
+        <!--        User login icon and notification-->
+        <div class="nav justify-content-right">
+            <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
+            <button type="button" data-click="notification" class="btn btn-outline-secondary btn-sm">
+                <span class="fa fa-comment badge badge-danger"> 9</span>
+            </button>
+
+            <!--            User Icon which toggles a dropdown for generic user options-->
+            <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
+                <img alt="account button" src="http://lorempixel.com/40/40/abstract">
+            </a>
+            <!--Dropdown menu for use with the user icon-->
+            <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
+                <a class="dropdown-item" href="#">Option 1</a>
+                <a class="dropdown-item" href="#">Option 2</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="index.html">Logout</a>
+            </div>
+        </div>
+
+    </nav>
+
+    <!--   A Container for all the main weekday stuff-->
+    <div class="WeekFlex" id="WeekdayContainer">
+
+        <!--        Magical stuff here loaded from Template01.html-->
+
+
+
+
+    </div>
+
+
+
+    <!--Bootstrap+JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/color/jquery.color-2.1.2.js" integrity="sha256-1Cn7TdfHiMcEbTuku97ZRSGt2b3SvZftEIn68UMgHC8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="Scripts/PageManager.js"></script>
+
+    <!--    same as Template01.html but this isn't rendered-->
+    <script type="text/html" id="Template01">
+        <div class="colorFrameTop">
+            A Weekday
+        </div>
+        <div class="colorFrameContent card-body">
+            <div class="contentShortContainer">My super cool list of stuff will go here</div>
+            <div class="contentExpandedContainer">TESTING DYNAMIC LOAD</div>
+        </div>
+    </script>
+    
+    
+</body>
+
+<footer></footer></html>

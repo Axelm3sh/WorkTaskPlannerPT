@@ -6,110 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TWORKER</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="Styles/style.css">
-    <link rel="stylesheet" href="Styles/ColorContainers.css">
+    <link rel="stylesheet" href="Styles/front_page.css">
 
 </head>
-
 <body>
+    <div class="banner">
+        <h3>
+            <a href="index.html">Work Planner</a>
+        </h3>
 
-    <!--    Top White bar for login and notifies-->
-    <nav class="navbar">
-        <!-- This list should be centered -->
-        <ul class="nav mx-auto justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" data-click="prev-week"><span class="fa fa-arrow-circle-left "></span></a>
-            </li>
-            <li class="nav-item">
-                <a id="currentWeek" data-click="current-week" class="nav-link">Weekday Text</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-click="next-week"><span class="fa fa-arrow-circle-right"></span></a>
-            </li>
-        </ul>
-
-        <!--        User login icon and notification-->
-        <div class="nav justify-content-right">
-            <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
-            <button type="button" data-click="notification" class="btn btn-outline-secondary btn-sm">
-                <span class="fa fa-comment badge badge-danger"> 9</span>
-            </button>
-
-            <!--            User Icon which toggles a dropdown for generic user options-->
-            <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
-                <img alt="account button" src="http://lorempixel.com/40/40/abstract">
-            </a>
-            <!--Dropdown menu for use with the user icon-->
-            <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
-                <a class="dropdown-item" href="#">Option 1</a>
-                <a class="dropdown-item" href="#">Option 2</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Logout</a>
-            </div>
-        </div>
-
-    </nav>
-
-    <!--   A Container for all the main weekday stuff-->
-    <div class="WeekFlex" id="WeekdayContainer">
-
-        <!--        Magical stuff here loaded from Template01.html-->
-
-
-
-
+        <!-- login form -->
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        <label for="login-email">Email</label>
+                    </td>
+                    <td>
+                        <label for="login-password">Password</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="login-email" class="inputtext" name="login-email" type="email">
+                    </td>
+                    <td>
+                        <input id="login-password" class="inputtext" name="login-password" type="password">
+                    </td>
+                    <td>
+                        <!-- link made to look like a button to redirect to the app page -->
+                        <a class="loginbtn" href="app.html">Log In</a>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="acct_recovery.html">Forgot account?</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 
-
-
-    <!--Bootstrap+JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/color/jquery.color-2.1.2.js" integrity="sha256-1Cn7TdfHiMcEbTuku97ZRSGt2b3SvZftEIn68UMgHC8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="Scripts/PageManager.js"></script>
-
-    <!--**********TEMPLATES********-->
-    <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
-    <script type="text/html" id="dayContainerTemplate">
-        <div class="colorFrameBase card" $ data-click="day-slot"></div>
-
-    </script>
-
-    <script type="text/html" id="Template01">
-        <div class="colorFrameTop">
-            A Weekday
+    <div class="content">
+        <div class="app-desc">
+            <h1>Plan your days</h1>
+            <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> -->
+            <p>Write your schedule. Set due dates. Check them off as you go. Work Planner is designed to help keep track of your schedule and productivity!</p>
         </div>
-        <div class="colorFrameContent card-body">
-
-            <div class="contentShortContainer" data-visible="true">My super cool abbreviated list of stuff will go here</div>
-            <div class="dropdown-divider"></div>
-            <!--            -->
-            <div class="contentExpandedContainer float-right" data-visible="false">
-                <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
-            </div>
+        
+        <!-- signup form -->
+        <div class="signup">
+            <form>
+                <dl>
+                    <dt>
+                        <label for="signup-email">Email</label>
+                    </dt>
+                    <dd>
+                        <input id="signup-email" class="inputtext" name="signup-email" type="email">
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <label for="signup-password>">Password</label>
+                    </dt>
+                    <dd>
+                        <input id="signup-password" class="inputtext" name="signup-password" type="password">
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <label for="signup-password-second">Re-enter password</label>
+                    </dt>
+                    <dd>
+                        <input id="signup-password-second" class="inputtext" name="signup-password-second" type="password">
+                    </dd>
+                </dl>
+                <p>Must be at least 8 chaaracters including a number and uppercase letter.</p>
+                <button type="submit">Sign Up</button>
+            </form>
         </div>
-
-    </script>
-
-    <!--    Close slot button, should only be visible when -->
-    <script type="text/html" id="slotExitTemplate">
-        <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
-
-    </script>
-    
-    <!--    Item Add Template-->
-    <script type="text/html" id="itemTaskTemplate">
-        <div class="contentExpandedContainer" data-visible="false">
-            Test Item! Put Text Here.
-        </div>
-
-    </script>
-
+    </div>
 
 </body>
-
-<footer></footer>
-
 </html>

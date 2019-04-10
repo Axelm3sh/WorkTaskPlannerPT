@@ -1,0 +1,77 @@
+/* Using CSUF colors https://www.fullerton.edu/webstandards/default/Colors.php */
+
+.banner {
+    color: #FFFFFF;
+    background-color: #00274C;
+    display: flex;
+}
+
+h3 a, h3 a:hover {
+    /* remove default underline and color change */
+    text-decoration: none;
+    color: inherit;
+}
+
+td a {
+    color: inherit;
+}
+
+td a:hover {
+    color: #DDDDDD;
+}
+
+.banner h3 {
+    margin: auto auto auto 10px;
+}
+
+form {
+    /* login form */
+    margin-right: 10px;
+    margin-left: auto;
+    font-size: 13px;
+}
+
+.loginbtn {
+    /* temporary link */
+    background-color: #1E5793;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.content {
+    background-color: #E0EDF6;
+    display: flex;
+    height: 30em;
+}
+
+.content .app-desc {
+    width: 50em;
+    padding: 200px 100px 100px 100px;
+}
+
+.content .signup {
+    background-color: #FFFFFF;
+    width: 20em;
+    padding: 30px;
+    margin: 50px;
+    border-radius: 15px;
+}
+
+.content input {
+    width: 100%;
+    margin-bottom: 3px;
+}
+
+.signup p {
+    font-size: 10px;
+    color: #565656;
+}
+
+.signup button {
+    padding: 0.5em 0;
+    width: 100%;
+    background-color: #1E5793;
+    border-color: #1E5793;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
