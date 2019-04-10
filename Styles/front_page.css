@@ -18,6 +18,7 @@ td a {
 
 td a:hover {
     color: #DDDDDD;
+    text-decoration: none;
 }
 
 .banner h3 {
@@ -90,4 +91,14 @@ form {
     padding: 10px;
     margin: 0 auto;
     border-radius: 5px;
+}
+
+.forgot-email-btn:hover {
+    color: #DDDDDD;
+    text-decoration: none;
+}
+
+.forgot-email-container {
+    text-align: center;
+    margin: 20px auto auto auto;
 }

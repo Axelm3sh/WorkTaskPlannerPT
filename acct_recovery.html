@@ -5,9 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TWORKER</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="Styles/front_page.css">
 </head>
+
 <body>
-    <h1>Page under construction.</h1>
+    <!-- <h1>Page under construction.</h1> -->
     <!-- Reset your password -->
     <!-- enter your email address -->
     <!-- input text -->
@@ -17,5 +21,58 @@
     <!-- we have sent your code to _________. Please check your email for the code. -->
     <!-- input text for code -->
     <!-- resend, continue, cancel -->
+
+    <div class="banner">
+        <!-- Work Planner "logo" -->
+        <h3>
+            <a href="index.html">Work Planner</a>
+        </h3>
+
+        <!-- login form -->
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        <label for="login email">Email</label>
+                    </td>
+                    <td>
+                        <label for="login password">Password</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="login email" class="inputtext" name="login email" type="email">
+                    </td>
+                    <td>
+                        <input id="login password" class="inputtext" name="login password" type="password">
+                    </td>
+                    <td>
+                        <!-- link made to look like a button to redirect to the app page -->
+                        <a class="loginbtn" href="app.html">Log In</a>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="acct_recovery.html">Forgot account?</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="content">
+        <div class="acc-recover">
+            <h3>Reset your password</h3>
+            <form>
+                <label for="forgot-pass email">Enter your email address</label>
+                <input id="forgot-pass email" class="inputtext" name="forgot-pass email" type="email">
+                <div class="forgot-email-container">
+                    <a class="forgot-email-btn" href="#">Send reset password email</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </body>
