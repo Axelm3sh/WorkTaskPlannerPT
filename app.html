@@ -44,7 +44,7 @@
                 <a class="dropdown-item" href="#">Option 1</a>
                 <a class="dropdown-item" href="#">Option 2</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="index.html">Logout</a>
+                <a class="dropdown-item" href="#">Logout</a>
             </div>
         </div>
 
@@ -70,18 +70,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="Scripts/PageManager.js"></script>
 
-    <!--    same as Template01.html but this isn't rendered-->
+    <!--**********TEMPLATES********-->
+    <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
+    <script type="text/html" id="dayContainerTemplate">
+        <div class="colorFrameBase card" $ data-click="day-slot"></div>
+
+    </script>
+
     <script type="text/html" id="Template01">
         <div class="colorFrameTop">
             A Weekday
         </div>
         <div class="colorFrameContent card-body">
-            <div class="contentShortContainer">My super cool list of stuff will go here</div>
-            <div class="contentExpandedContainer">TESTING DYNAMIC LOAD</div>
+
+            <div class="contentShortContainer" data-visible="true">My super cool abbreviated list of stuff will go here</div>
+            <div class="dropdown-divider"></div>
+            <!--            -->
+            <div class="contentExpandedContainer float-right" data-visible="false">
+                <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
+            </div>
         </div>
+
+    </script>
+
+    <!--    Close slot button, should only be visible when -->
+    <script type="text/html" id="slotExitTemplate">
+        <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
+
     </script>
     
-    
+    <!--    Item Add Template-->
+    <script type="text/html" id="itemTaskTemplate">
+        <div class="contentExpandedContainer" data-visible="false">
+            Test Item! Put Text Here.
+        </div>
+
+    </script>
+
+
 </body>
 
-<footer></footer></html>
+<footer></footer>
+
+</html>
