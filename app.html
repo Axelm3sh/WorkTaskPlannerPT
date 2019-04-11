@@ -136,7 +136,11 @@
                 <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
             </div>
         </div>
-
+        <div class="colorFrameBottom">
+            <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" style="width:70%">
+                70%
+            </div>
+        </div>
     </script>
 
     <!--    Close slot button, should only be visible when -->
@@ -148,6 +152,9 @@
     <!--    Item Add Template-->
     <script type="text/html" id="itemTaskTemplate">
         <div class="contentExpandedContainer entry" data-visible="false" contenteditable="true">
+            <div class="input-group-append">
+                <button id="remove-item" class="btn btn-outline-secondary" type="button"></button>
+            </div>
             Test Item! Put Text Here.
         </div>
 
