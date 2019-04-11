@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>TWORKER</title>
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+    <!-- Custom Theme files -->
+    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <link href="css/font-awesome.css" rel="stylesheet"> 
+    <script src="js/jquery.min.js"> </script>
+    <script src="js/Chart.js"></script>
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="Styles/ColorContainers.css">
+
+
+
+</head>
+<body>
+
+    <!--    Top White bar for login and notifies-->
+    <nav class="navbar">
+        <!-- This list should be centered -->
+        <ul class="nav mx-auto justify-content-center">
+            <h1>Stats</h1>
+        </ul>
+
+        <!--        User login icon and notification-->
+        <div class="nav justify-content-right">
+            <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
+            <button type="button" data-click="notification" class="btn btn-outline-secondary btn-sm">
+                <span class="fa fa-comment badge badge-danger"> 9</span>
+            </button>
+
+            <!--            User Icon which toggles a dropdown for generic user options-->
+            <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
+                <img alt="account button" src="http://lorempixel.com/40/40/abstract">
+            </a>
+            <!--Dropdown menu for use with the user icon-->
+            <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
+                <a class="dropdown-item" href="#">Option 1</a>
+                <a class="dropdown-item" href="#">Option 2</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="index.html">Logout</a>
+            </div>
+        </div>
+
+    </nav>
+
+    <div class="content">
+        
+        <div class="graph">
+            <div class="graph-grid">
+                <div class="col-md-6 graph-1">
+                    <div class="grid-1">
+                        <h4>Tasks</h4>
+                        <canvas id="bar1" height="300" width="500" style="width: 500px; height: 300px;"></canvas>
+                        <script>
+                            var barChartData = {
+                                labels : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+                                datasets : [
+                                    {
+                                        fillColor : "blue",
+                                        strokeColor : "blue",
+                                        data : [25,40,50,65,55,30,20]
+                                    },
+                                    {
+                                        fillColor : "red",
+                                        strokeColor : "red",
+                                        data : [30,45,55,70,40,25,15]
+                                    }
+                                ]
+                                
+                            };
+                                new Chart(document.getElementById("bar1").getContext("2d")).Bar(barChartData);
+                        </script>
+                    </div>
+                </div>
+                <div class="col-md-6 graph-2">
+                    <div class="grid-1">
+                        <h4>Tasks</h4>
+                        <canvas id="line1" height="300" width="500" style="width: 500px; height: 300px;"></canvas>
+                        <script>
+                                var lineChartData = {
+                                    labels : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+                                    datasets : [
+                                        {
+                                            fillColor : "#fff",
+                                            strokeColor : "#1ABC9C",
+                                            pointColor : "#1ABC9C",
+                                            pointStrokeColor : "#1ABC9C",
+                                            data : [40,35,45,30,50,30,40]
+                                        }
+                                    ]
+                                    
+                                };
+                                new Chart(document.getElementById("line1").getContext("2d")).Line(lineChartData);
+                        </script>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            
+            
+        </div>  
+<!------------------------------------->
+    
+        
+            
+            <div class="clearfix"> </div>
+        </div>              
+    </div>
+        
+        
+    </div>
+
+
+    <script src="js/bootstrap.min.js"> </script>
+      
+      
+    <!-- Mainly scripts -->
+    <script src="js/jquery.metisMenu.js"></script>
+    <script src="js/jquery.slimscroll.min.js"></script>
+    <!-- Custom and plugin javascript -->
+    <link href="css/custom.css" rel="stylesheet">
+    <script src="js/custom.js"></script>
+    <script src="js/screenfull.js"></script>
+    <script>
+    $(function () {
+        $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
+
+        if (!screenfull.enabled) {
+            return false;
+        }
+
+        
+
+        $('#toggle').click(function () {
+            screenfull.toggle($('#container')[0]);
+        });
+        
+
+        
+    });
+    </script>
+
+    <!----->
+
+    <!--scrolling js-->
+    <script src="js/jquery.nicescroll.js"></script>
+    <script src="js/scripts.js"></script>
+    <!--//scrolling js-->
+
+</body>
+</html>
