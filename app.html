@@ -42,13 +42,59 @@
             <!--Dropdown menu for use with the user icon-->
             <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
                 <a class="dropdown-item" href="#">Option 1</a>
-                <a class="dropdown-item" href="#">Option 2</a>
+                <a class="dropdown-item" data-toggle="modal" href="#settingModal">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="index.html">Logout</a>
+                <a class="dropdown-item" data-toggle="modal" href="#logoutModal">Logout</a>
             </div>
         </div>
 
     </nav>
+
+    <!-- Modals -->
+    <div class="modal fade" id="settingModal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <p>Insert options here</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Logout</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to log out?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <a href="index.html" class="btn btn-info" role="button">Logout</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <!--   A Container for all the main weekday stuff-->
     <div class="WeekFlex" id="WeekdayContainer">
@@ -98,10 +144,10 @@
         <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
 
     </script>
-    
+
     <!--    Item Add Template-->
     <script type="text/html" id="itemTaskTemplate">
-        <div class="contentExpandedContainer" data-visible="false">
+        <div class="contentExpandedContainer entry" data-visible="false" contenteditable="true">
             Test Item! Put Text Here.
         </div>
 
