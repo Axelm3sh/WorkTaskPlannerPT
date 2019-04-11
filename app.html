@@ -151,11 +151,11 @@
 
     <!--    Item Add Template-->
     <script type="text/html" id="itemTaskTemplate">
-        <div class="contentExpandedContainer entry" data-visible="false" contenteditable="true">
+        <div class="contentExpandedContainer entry input-group" data-visible="false">
             <div class="input-group-append">
-                <button id="remove-item" class="btn btn-outline-secondary" type="button"></button>
+                <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
-            Test Item! Put Text Here.
+            <input class="form-control" type="text" placeholder="Test Item! Put Text Here.">
         </div>
 
     </script>

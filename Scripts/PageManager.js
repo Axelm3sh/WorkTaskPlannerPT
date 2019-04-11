@@ -146,6 +146,18 @@ clickActions["add-item"] = function (e) {
 
 };
 
+//Removing item row
+clickActions["remove-item"] = function (e)
+{
+    console.log("removed item from slot");
+    var $obj = $(e.currentTarget) || $();
+    
+    $obj.closest(".contentExpandedContainer").remove();
+    
+    //should update the progress bar's total too.
+    
+}
+
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
     //trick IDE autocomplete
