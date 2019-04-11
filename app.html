@@ -50,51 +50,52 @@
 
     </nav>
 
-    <!-- Modals -->
+    <!-- ***********Modals **********-->
     <div class="modal fade" id="settingModal" role="dialog">
-      <div class="modal-dialog">
+        <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Settings</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>
-          <div class="modal-body">
-            <p>Insert options here</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Insert options here</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
         </div>
-
-      </div>
     </div>
 
     <div class="modal fade" id="logoutModal" role="dialog">
-      <div class="modal-dialog">
+        <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Logout</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          </div>
-          <div class="modal-body">
-            <p>Are you sure you want to log out?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <a href="index.html" class="btn btn-info" role="button">Logout</a>
-          </div>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to log out?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a href="index.html" class="btn btn-info" role="button">Logout</a>
+                </div>
+            </div>
+
         </div>
-
-      </div>
     </div>
+
 
     <!--   A Container for all the main weekday stuff-->
     <div class="WeekFlex" id="WeekdayContainer">
@@ -114,13 +115,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/color/jquery.color-2.1.2.js" integrity="sha256-1Cn7TdfHiMcEbTuku97ZRSGt2b3SvZftEIn68UMgHC8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
     <script src="Scripts/PageManager.js"></script>
 
     <!--**********TEMPLATES********-->
     <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
     <script type="text/html" id="dayContainerTemplate">
         <div class="colorFrameBase card" $ data-click="day-slot"></div>
-
     </script>
 
     <script type="text/html" id="Template01">
@@ -146,7 +147,6 @@
     <!--    Close slot button, should only be visible when -->
     <script type="text/html" id="slotExitTemplate">
         <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
-
     </script>
 
     <!--    Item Add Template-->
@@ -157,12 +157,9 @@
             </div>
             <input class="form-control" type="text" placeholder="Test Item! Put Text Here.">
         </div>
-
     </script>
 
 
 </body>
 
-<footer></footer>
-
-</html>
+<footer></footer></html>

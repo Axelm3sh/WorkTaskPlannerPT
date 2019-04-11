@@ -5,6 +5,20 @@ var $WeekdayContainer = $("#WeekdayContainer");
 var momentCurrent = moment();
 var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
 
+var hammer = new Hammer($(".colorFrameBase"));
+//Testing hammer function, gestures not yet implemented
+//$('.img-item').each(function(){
+//    var $this = $(this);
+//    var mc = new Hammer(this);
+//    mc.on("doubletap", function() {
+//        console.log('Double tap!');
+//        alert('Double tap!');
+//        $this.toggleClass('liked');
+//        return false;
+//    });
+//});
+
+
 
 //color arrays
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
@@ -155,8 +169,9 @@ clickActions["remove-item"] = function (e)
     $obj.closest(".contentExpandedContainer").remove();
     
     //should update the progress bar's total too.
+    //take completed items in container, divide by total
     
-}
+};
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {

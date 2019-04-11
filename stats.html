@@ -5,11 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TWORKER</title>
-    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+
+    </script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Custom Theme files -->
     <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <link href="css/font-awesome.css" rel="stylesheet"> 
+    <link href="css/font-awesome.css" rel="stylesheet">
     <script src="js/jquery.min.js"> </script>
     <script src="js/Chart.js"></script>
     <link rel="stylesheet" href="Styles/style.css">
@@ -18,13 +27,14 @@
 
 
 </head>
+
 <body>
 
- <!--    Top White bar for login and notifies-->
+    <!--    Top White bar for login and notifies-->
     <nav class="navbar">
         <!-- This list should be centered -->
         <ul class="nav mx-auto justify-content-center">
-<!--
+            <!--
             <li class="nav-item">
                 <a class="nav-link" data-click="prev-week"><span class="fa fa-arrow-circle-left "></span></a>
             </li>
@@ -60,7 +70,7 @@
     </nav>
 
     <div class="content">
-        
+
         <div class="graph">
             <div class="graph-grid">
                 <div class="col-md-6 graph-1">
@@ -69,22 +79,22 @@
                         <canvas id="bar1" height="300" width="500" style="width: 500px; height: 300px;"></canvas>
                         <script>
                             var barChartData = {
-                                labels : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
-                                datasets : [
-                                    {
-                                        fillColor : "blue",
-                                        strokeColor : "blue",
-                                        data : [25,40,50,65,55,30,20]
+                                labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                                datasets: [{
+                                        fillColor: "blue",
+                                        strokeColor: "blue",
+                                        data: [25, 40, 50, 65, 55, 30, 20]
                                     },
                                     {
-                                        fillColor : "red",
-                                        strokeColor : "red",
-                                        data : [30,45,55,70,40,25,15]
+                                        fillColor: "red",
+                                        strokeColor: "red",
+                                        data: [30, 45, 55, 70, 40, 25, 15]
                                     }
                                 ]
-                                
+
                             };
-                                new Chart(document.getElementById("bar1").getContext("2d")).Bar(barChartData);
+                            new Chart(document.getElementById("bar1").getContext("2d")).Bar(barChartData);
+
                         </script>
                     </div>
                 </div>
@@ -93,43 +103,38 @@
                         <h4>Tasks</h4>
                         <canvas id="line1" height="300" width="500" style="width: 500px; height: 300px;"></canvas>
                         <script>
-                                var lineChartData = {
-                                    labels : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
-                                    datasets : [
-                                        {
-                                            fillColor : "#fff",
-                                            strokeColor : "#1ABC9C",
-                                            pointColor : "#1ABC9C",
-                                            pointStrokeColor : "#1ABC9C",
-                                            data : [40,35,45,30,50,30,40]
-                                        }
-                                    ]
-                                    
-                                };
-                                new Chart(document.getElementById("line1").getContext("2d")).Line(lineChartData);
+                            var lineChartData = {
+                                labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                                datasets: [{
+                                    fillColor: "#fff",
+                                    strokeColor: "#1ABC9C",
+                                    pointColor: "#1ABC9C",
+                                    pointStrokeColor: "#1ABC9C",
+                                    data: [40, 35, 45, 30, 50, 30, 40]
+                                }]
+
+                            };
+                            new Chart(document.getElementById("line1").getContext("2d")).Line(lineChartData);
+
                         </script>
                     </div>
                 </div>
                 <div class="clearfix"> </div>
             </div>
-            
-            
-        </div>  
-<!------------------------------------->
-    
-        
-            
-            <div class="clearfix"> </div>
-        </div>              
-    </div>
-        
-        
+
+
+        </div>
+        <!------------------------------------->
+
+
+
+        <div class="clearfix"> </div>
     </div>
 
 
     <script src="js/bootstrap.min.js"> </script>
-      
-      
+
+
     <!-- Mainly scripts -->
     <script src="js/jquery.metisMenu.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
@@ -138,22 +143,23 @@
     <script src="js/custom.js"></script>
     <script src="js/screenfull.js"></script>
     <script>
-    $(function () {
-        $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
+        $(function() {
+            $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
 
-        if (!screenfull.enabled) {
-            return false;
-        }
+            if (!screenfull.enabled) {
+                return false;
+            }
 
-        
 
-        $('#toggle').click(function () {
-            screenfull.toggle($('#container')[0]);
+
+            $('#toggle').click(function() {
+                screenfull.toggle($('#container')[0]);
+            });
+
+
+
         });
-        
 
-        
-    });
     </script>
 
     <!----->
@@ -164,4 +170,5 @@
     <!--//scrolling js-->
 
 </body>
+
 </html>
