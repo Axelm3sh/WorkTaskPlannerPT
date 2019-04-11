@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TWORKER</title>
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Custom Theme files -->
-    <link href="css/style.css" rel='stylesheet' type='text/css' />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
     <link href="css/font-awesome.css" rel="stylesheet"> 
     <script src="js/jquery.min.js"> </script>
     <script src="js/Chart.js"></script>
@@ -20,11 +20,21 @@
 </head>
 <body>
 
-    <!--    Top White bar for login and notifies-->
+ <!--    Top White bar for login and notifies-->
     <nav class="navbar">
         <!-- This list should be centered -->
         <ul class="nav mx-auto justify-content-center">
-            <h1>Stats</h1>
+<!--
+            <li class="nav-item">
+                <a class="nav-link" data-click="prev-week"><span class="fa fa-arrow-circle-left "></span></a>
+            </li>
+            <li class="nav-item">
+                <a id="currentWeek" data-click="current-week" class="nav-link">Weekday Text</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-click="next-week"><span class="fa fa-arrow-circle-right"></span></a>
+            </li>
+-->
         </ul>
 
         <!--        User login icon and notification-->
@@ -40,10 +50,10 @@
             </a>
             <!--Dropdown menu for use with the user icon-->
             <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
-                <a class="dropdown-item" href="#">Option 1</a>
-                <a class="dropdown-item" href="#">Option 2</a>
+                <a class="dropdown-item" href="stats.html">Personal Stats</a>
+                <a class="dropdown-item" data-toggle="modal" href="#settingModal">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="index.html">Logout</a>
+                <a class="dropdown-item" data-toggle="modal" href="#logoutModal">Logout</a>
             </div>
         </div>
 
