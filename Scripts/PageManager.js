@@ -5,7 +5,10 @@ var $WeekdayContainer = $("#WeekdayContainer");
 var momentCurrent = moment();
 var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
 
-var hammer = new Hammer($(".colorFrameBase"));
+var hammer = new Hammer(document.getElementById("WeekdayContainer"));
+hammer.on("swipeleft swiperight", function (ev) {
+    console.log(ev.type + " detected");
+});
 //Testing hammer function, gestures not yet implemented
 //$('.img-item').each(function(){
 //    var $this = $(this);
@@ -17,6 +20,8 @@ var hammer = new Hammer($(".colorFrameBase"));
 //        return false;
 //    });
 //});
+
+
 
 
 

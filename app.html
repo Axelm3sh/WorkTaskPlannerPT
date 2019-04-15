@@ -41,8 +41,8 @@
             </a>
             <!--Dropdown menu for use with the user icon-->
             <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
-                <a class="dropdown-item" href="stats.html">Personal Stats</a>
-                <a class="dropdown-item" data-toggle="modal" href="#settingModal">Settings</a>
+                <a class="dropdown-item" href="stats.html">Personal Stats <span class="fa fa-bar-chart"></span></a>
+                <a class="dropdown-item" data-toggle="modal" href="#settingModal">Settings <span class="fa fa-gear"></span></a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" href="#logoutModal">Logout</a>
             </div>
@@ -152,10 +152,10 @@
     <!--    Item Add Template-->
     <script type="text/html" id="itemTaskTemplate">
         <div class="contentExpandedContainer entry input-group" data-visible="false">
+            <input class="form-control" type="text" placeholder="Test Item! Put Text Here.">
             <div class="input-group-append">
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
-            <input class="form-control" type="text" placeholder="Test Item! Put Text Here.">
         </div>
     </script>
 
