@@ -281,8 +281,6 @@ function loadTemplate() {
 
         });
 
-
-
         $tempDaySlot.css("zIndex", 8 - i);
     }
 

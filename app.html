@@ -108,8 +108,10 @@
     </div>
 
 
-<!--   Firebase API w/ Google Auth-->
+    <!--   Firebase API w/ Google Auth-->
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-firestore.js"></script>
     <script>
         // Initialize Firebase
         var config = {
@@ -121,8 +123,9 @@
             messagingSenderId: "495053764521"
         };
         firebase.initializeApp(config);
+
     </script>
-   
+
     <!--Bootstrap+JQUERY-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -136,6 +139,7 @@
     <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
     <script type="text/html" id="dayContainerTemplate">
         <div class="colorFrameBase card" $ data-click="day-slot"></div>
+
     </script>
 
     <script type="text/html" id="Template01">
@@ -156,11 +160,13 @@
                 70%
             </div>
         </div>
+
     </script>
 
     <!--    Close slot button, should only be visible when -->
     <script type="text/html" id="slotExitTemplate">
         <span class="fa fa-times-circle fa-lg float-right contentExpandedContainer" data-click="exit-day-slot" data-visible="false"></span>
+
     </script>
 
     <!--    Item Add Template-->
@@ -171,9 +177,12 @@
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
         </div>
+
     </script>
 
 
 </body>
 
-<footer></footer></html>
+<footer></footer>
+
+</html>
