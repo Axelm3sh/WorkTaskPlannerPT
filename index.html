@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="Styles/front_page.css">
 
 </head>
+
 <body>
     <div class="banner">
         <h3>
@@ -37,7 +38,7 @@
                         <!-- link made to look like a button to redirect to the app page -->
                         <a class="loginbtn" href="app.html">Log In</a>
                     </td>
-                    
+
                 </tr>
                 <tr>
                     <td></td>
@@ -55,7 +56,7 @@
             <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> -->
             <p>Write your schedule. Set due dates. Check them off as you go. Work Planner is designed to help keep track of your schedule and productivity!</p>
         </div>
-        
+
         <!-- signup form -->
         <div class="signup">
             <form>
@@ -90,4 +91,19 @@
     </div>
 
 </body>
+
+<!--Firebase API w/ Google Auth-->
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyCJj6GEo-xQFRV5tXDBKVXBcAeM11oLKpo",
+        authDomain: "tworkerplanner.firebaseapp.com",
+        databaseURL: "https://tworkerplanner.firebaseio.com",
+        projectId: "tworkerplanner",
+        storageBucket: "tworkerplanner.appspot.com",
+        messagingSenderId: "495053764521"
+    };
+    firebase.initializeApp(config);
+</script>
 </html>
