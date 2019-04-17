@@ -36,8 +36,8 @@
                     </td>
                     <td>
                         <!-- link made to look like a button to redirect to the app page -->
-<!--                        <a class="loginbtn" href="app.html">Log In</a>-->
-                        <a class="loginbtn" onclick="GAuthPopup">Log In</a>
+                        <!--                        <a class="loginbtn" href="app.html">Log In</a>-->
+                        <a class="loginbtn" href="#" id="login-button" onclick="GAuthPopup()" role="button">Log In</a>
                     </td>
 
                 </tr>
@@ -91,25 +91,14 @@
         </div>
     </div>
 
-</body>
 
-<!--Firebase API w/ Google Auth-->
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
+    <!--Firebase API w/ Google Auth-->
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
 
-<script>
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyCJj6GEo-xQFRV5tXDBKVXBcAeM11oLKpo",
-        authDomain: "tworkerplanner.firebaseapp.com",
-        databaseURL: "https://tworkerplanner.firebaseio.com",
-        projectId: "tworkerplanner",
-        storageBucket: "tworkerplanner.appspot.com",
-        messagingSenderId: "495053764521"
-    };
-    firebase.initializeApp(config);
+    <script src="Scripts/init-firebase.js"></script>
 
-</script>
-<script src="Scripts/LoginHandler.js"></script>
+<!--    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>-->
 
-</html>
+    <script src="Scripts/LoginHandler.js"></script>
+
+</body></html>
