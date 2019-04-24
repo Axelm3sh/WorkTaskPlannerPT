@@ -22,7 +22,7 @@ hammer.on("swipeleft swiperight", function (ev) {
 //});
 
 
-
+//var fireDB;
 
 
 //color arrays
@@ -45,10 +45,35 @@ $docObj.on("click", "*", function (elem) {
 });
 //END Universal Click handler
 
+//User Authorization listener
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        // User is signed in.
+        console.log("user signed in");
+        user.providerData.forEach(function (profile) {
+            console.log("Sign-in provider: " + profile.providerId);
+            console.log("  Provider-specific UID: " + profile.uid);
+            console.log("  Name: " + profile.displayName);
+            console.log("  Email: " + profile.email);
+            console.log("  Photo URL: " + profile.photoURL);
+            
+            //swap default place holder icon with actual account photo
+            $("#userIcon").attr("src", profile.photoURL);
+        });
+
+    } else {
+        // No user is signed in.
+        console.log("no user signed in");
+        //      GAuthPopup();
+        window.location.href = "index.html";
+    }
+});
+
 //JQUERY ready is similar to window.onload except it occurs earlier
 $docObj.ready(function () {
     console.log("Page has loaded!");
     //    alert("Page loaded, welcome!");
+
 
     //Display current date at the top of the week using a cloned object from Moment.js
     displayWeekTop(momentInstance);
@@ -57,9 +82,11 @@ $docObj.ready(function () {
 
 });
 
-//default DOM event occurs when images and everything is loaded, not needed most likely
+
+//default DOM event occurs when images and everything is loaded, used for firebase because it's loaded first before jquery.
 window.onload = function () {
     //postColorFix();
+
 };
 
 //************Click Actions**********
@@ -106,11 +133,10 @@ clickActions["day-slot"] = function (e) {
     var $target = $(e.currentTarget) || $();
 
     //Don't do anything if it has been already expanded
-    if (!$target.hasClass("expandedCol")) 
-    {
+    if (!$target.hasClass("expandedCol")) {
         //Normalize all in case they clicked on another slot
         frameNormalizeAll();
-        
+
         //toggleExpansion($target);
         frameExpansion($target);
 
@@ -166,16 +192,15 @@ clickActions["add-item"] = function (e) {
 };
 
 //Removing item row
-clickActions["remove-item"] = function (e)
-{
+clickActions["remove-item"] = function (e) {
     console.log("removed item from slot");
     var $obj = $(e.currentTarget) || $();
-    
+
     $obj.closest(".contentExpandedContainer").remove();
-    
+
     //should update the progress bar's total too.
     //take completed items in container, divide by total
-    
+
 };
 
 //Auto expansion/normalization, given a ColorFrameBase
@@ -238,7 +263,7 @@ function displayWeekTop(dateObject) {
     dateObject = dateObject || moment();
 
     //Using Moment.js
-    var now = moment(dateObject).utcOffset(0, true).format("Do of MMMM, YYYY");
+    var now = moment(dateObject).utcOffset(0, true).format("dddd, Do of MMMM, YYYY");
     $("#currentWeek").html(now);
 
 }

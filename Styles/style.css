@@ -11,3 +11,8 @@ html, body {
 nav li {
     font-size: 2em;
 }
+
+#userIcon {
+	max-height: 40px;
+    max-width: 40px;
+}

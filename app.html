@@ -37,7 +37,7 @@
 
             <!--            User Icon which toggles a dropdown for generic user options-->
             <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
-                <img alt="account button" src="http://lorempixel.com/40/40/abstract">
+                <img id="userIcon" alt="account button" src="http://lorempixel.com/40/40/abstract">
             </a>
             <!--Dropdown menu for use with the user icon-->
             <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
@@ -89,7 +89,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a href="index.html" class="btn btn-info" role="button">Logout</a>
+<!--                    <a href="index.html" class="btn btn-info" role="button">Logout</a>-->
+                    <a onclick="userSignOut()" class="btn btn-info" role="button">Logout</a>
                 </div>
             </div>
 
@@ -110,8 +111,8 @@
 
     <!--   Firebase API w/ Google Auth-->
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-firestore.js"></script>
+<!--    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>-->
+<!--    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-firestore.js"></script>-->
     <script src="Scripts/init-firebase.js"></script>
 
     <!--Bootstrap+JQUERY-->
@@ -122,6 +123,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
     <script src="Scripts/PageManager.js"></script>
+    <script src="Scripts/LoginHandler.js"></script>
 
     <!--**********TEMPLATES********-->
     <!--    same as Template01.html but this isn't rendered and can be accessible via a selector directly-->
@@ -160,8 +162,9 @@
     <!--    Item Add Template-->
     <script type="text/html" id="itemTaskTemplate">
         <div class="contentExpandedContainer entry input-group" data-visible="false">
-            <input class="form-control" type="text" placeholder="Test Item! Put Text Here.">
+            <textarea class="form-control" type="text" placeholder="Test Item! Put Text Here."></textarea>
             <div class="input-group-append">
+                <button id="save-item" class="btn btn-outline-info" data-click="save-item" type="button"><span class="fa fa-save"></span></button>
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
         </div>
