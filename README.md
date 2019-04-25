@@ -11,4 +11,4 @@ For the prototype, we planned this as our first screen post login
 This mockup shows what happens when you tap a day to "drill into" more details
 ![Select Day Fold](Assets/WorkPlannerWireframe_Fold.png)
 
-Using: Bootstrap, Jquery, Popper, Font Awesome (icons), Moment.js
+Using: Bootstrap, Jquery, Popper, Font Awesome (icons), Moment.js, Hammerjs, Firebase API

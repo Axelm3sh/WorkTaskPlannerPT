@@ -22,7 +22,7 @@ hammer.on("swipeleft swiperight", function (ev) {
 //});
 
 
-//var fireDB;
+var fireDB;
 
 
 //color arrays
@@ -56,9 +56,35 @@ firebase.auth().onAuthStateChanged(function (user) {
             console.log("  Name: " + profile.displayName);
             console.log("  Email: " + profile.email);
             console.log("  Photo URL: " + profile.photoURL);
-            
+
             //swap default place holder icon with actual account photo
             $("#userIcon").attr("src", profile.photoURL);
+
+            //setup database reference if we signed in...
+            if (checkDB()) {
+                //                fireDB = firebase.database(); //OMG WRONG API NO WONDER
+                fireDB = firebase.firestore();
+
+                //testing
+//                fireDB.collection("users").get().then(function(docs){
+//                    //docs has different "users"
+////                    docs.forEach()
+//                });        
+                fireDB.collection("users").doc(profile.uid).get()
+                    .then(function(dbDoc){
+                    //Checks if the document (the user directory) exists
+                    if(dbDoc.exists)
+                        {
+                            console.log("Doc Data: ", dbDoc.data());
+                        }
+                    else
+                    {
+                        console.log("user does not exist, creating new...");
+                        fireDB.collection("users").doc(profile.uid).set({email: profile.email});
+                    }
+                })
+                
+            }//end checkDB
         });
 
     } else {
@@ -68,6 +94,25 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.location.href = "index.html";
     }
 });
+
+//
+function checkDB() {
+    var value = false;
+
+    if (firebase.auth().currentUser !== null) {
+        if (fireDB !== null) {
+            value = true;
+        } else {
+            value = false;
+        }
+    }
+
+    return value;
+}
+
+function userFirstTimeCheck() {
+
+}
 
 //JQUERY ready is similar to window.onload except it occurs earlier
 $docObj.ready(function () {
