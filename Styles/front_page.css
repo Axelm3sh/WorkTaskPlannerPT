@@ -21,6 +21,7 @@ header ul {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* image is labeled for reuse */
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/2/26/Wall_with_post-its.jpg");
 }
 
