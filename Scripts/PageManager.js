@@ -29,11 +29,11 @@ hammer.on("swipeleft swiperight", function (ev) {
 
 
 //color arrays
-var dayOfTheWeek      = ["SUN",     "MON",     "TUE",     "WED",       "THUR",     "FRI",     "SAT"    ];
-var defaultColorAR    = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e",   "#5d65ef",  "#a81fff", "#ea63b0"];
-var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c",   "#a3a6f6",  "#db85ff", "#ed91c7"];
-var backgroundColor   = ["#ffffff", "#2d2d2d"];
-var textColor         = ["#000000", "#ffffff"];
+var dayOfTheWeek = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
+var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
+var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
+var backgroundColor = ["#ffffff", "#2d2d2d"];
+var textColor = ["#000000", "#ffffff"];
 
 
 //*******Universal click handler functionality, 
@@ -62,7 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             console.log("  Name: " + profile.displayName);
             console.log("  Email: " + profile.email);
             console.log("  Photo URL: " + profile.photoURL);
-            
+
             //swap default place holder icon with actual account photo
             $("#userIcon").attr("src", profile.photoURL);
         });
@@ -208,10 +208,10 @@ clickActions["remove-item"] = function (e) {
 
     //should update the progress bar's total too.
     //take completed items in container, divide by total
-    updateProgressBar($obj);    // not working
+    updateProgressBar($obj); // not working
 };
 
-clickActions["check-item"] = function(e) {
+clickActions["check-item"] = function (e) {
     var $obj = $(e.currentTarget) || $();
 
     updateProgressBar($obj);
@@ -364,18 +364,41 @@ function postColorFix() {
 
     //raw text for slot exit button
     var slotExitTemplate = $("#slotExitTemplate").text();
+    //Separate object from the top nav weekday instance
+    var momentCalc = moment(momentInstance);
 
+    //Note: "index" is a value from 0-6, should calculate offsets accordingly
     $WeekdayContainer.find(".colorFrameTop").each(function (index) {
         var $top = $(this);
 
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
-        if(index >= 0 && index <= 6) {
-            date = momentInstance.add(index, 'days').format("D");
-            $top.html(date + " " + dayOfTheWeek[index]).append(slotExitTemplate);
-            momentInstance.subtract(index, 'days');
-        }
-        else {
+        if (index >= 0 && index <= 6) {
+            if (momentInstance.day() == index) {
+                date = momentInstance.format("Do");
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            } 
+            else if (momentCurrent.day() > index) 
+            {
+                if (index == 0) //offset by one for zero index
+                {
+                    date = momentCalc.subtract(index + 1, 'days').format("Do");
+                } else {
+                    date = momentCalc.subtract(index, 'days').format("Do");
+                }
+
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            } else //day < index
+            {
+                //offset by 1
+                date = momentCalc.add(index-1, 'days').format("Do");
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            }
+
+            //Reset for the next iteration
+            momentCalc = moment(momentInstance);
+
+        } else {
             console.log("Invalid Day!");
         }
     });
@@ -387,11 +410,10 @@ function postColorFix() {
 
 function toggleNightMode() {
     // store colors
-    if($("#nightMode").is(":checked")) {
+    if ($("#nightMode").is(":checked")) {
         localStorage.setItem("backgroundColor", backgroundColor[1]);
         localStorage.setItem("textColor", textColor[1]);
-    }
-    else {
+    } else {
         localStorage.setItem("backgroundColor", backgroundColor[0]);
         localStorage.setItem("textColor", textColor[0]);
     }
@@ -405,7 +427,7 @@ function loadSettings() {
 
     $docObj.css("background-color", bgc);
     navbar.css("color", tc);
-    modals.each(function() {
+    modals.each(function () {
         $(this).css("background-color", bgc);
         $(this).css("color", tc);
     });
