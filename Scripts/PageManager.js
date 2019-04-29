@@ -26,8 +26,10 @@ hammer.on("swipeleft swiperight", function (ev) {
 
 
 //color arrays
-var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
-var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
+
+var dayOfTheWeek      = ["SUN",     "MON",     "TUE",     "WED",       "THUR",     "FRI",     "SAT"    ];
+var defaultColorAR    = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e",   "#5d65ef",  "#a81fff", "#ea63b0"];
+var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c",   "#a3a6f6",  "#db85ff", "#ed91c7"];
 
 
 //*******Universal click handler functionality, 
@@ -356,34 +358,42 @@ function postColorFix() {
 
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
-        switch (index) {
-            case 0:
-                $top.html("SUNDAY").append(slotExitTemplate);
-                break;
-            case 1:
-                $top.html("MONDAY").append(slotExitTemplate);
-                break;
-            case 2:
-                $top.html("TUESDAY").append(slotExitTemplate);
-                break;
-            case 3:
-                $top.html("WEDNESDAY").append(slotExitTemplate);
-                break;
-            case 4:
-                $top.html("THURSDAY").append(slotExitTemplate);
-                break;
-            case 5:
-                $top.html("FRIDAY").append(slotExitTemplate);
-                break;
-            case 6:
-                $top.html("SATURDAY").append(slotExitTemplate);
-                break;
-            default:
-                console.log("Invalid Day!");
+        if(index >= 0 && index <= 6) {
+            date = momentInstance.add(index, 'days').format("D");
+            $top.html(date + " " + dayOfTheWeek[index]).append(slotExitTemplate);
+            momentInstance.subtract(index, 'days');
+        }
+        else {
+            console.log("Invalid Day!");
         }
     });
 
     $WeekdayContainer.find(".colorFrameContent").each(function (index) {
         $(this).css("background-color", complementColorAR[index]);
     });
+}
+
+function toggleNightMode() {
+    var checkbox = $("#nightMode");
+    var navbar = $(".navbar");
+    // var modals = $(".modal-content");
+
+    if(checkbox.is(":checked")) {
+        $docObj.css("background-color", "rgb(45, 45, 45)");
+        navbar.css("color", "rgb(255, 255, 255)");
+
+        // modals.each(function() {
+        //     $(this).css("background-color", "rgb(45, 45, 45)");
+        //     $(this).css("color", "rgb(255, 255, 255)");
+        // });
+    }
+    else {
+        $docObj.css("background-color", "rgb(255, 255, 255)");
+        navbar.css("color", "rgb(0, 0, 0)");
+
+        // modals.each(function() {
+        //     $(this).css("background-color", "rgb(255, 255, 255)");
+        //     $(this).css("color", "rgb(0, 0, 0)");
+        // });
+    }
 }
