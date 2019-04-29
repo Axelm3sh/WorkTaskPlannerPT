@@ -33,7 +33,7 @@ var dayOfTheWeek      = ["SUN",     "MON",     "TUE",     "WED",       "THUR",  
 var defaultColorAR    = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e",   "#5d65ef",  "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c",   "#a3a6f6",  "#db85ff", "#ed91c7"];
 var backgroundColor   = ["#ffffff", "#2d2d2d"];
-var textColor         = ["#000000", "#ffffff"]
+var textColor         = ["#000000", "#ffffff"];
 
 
 //*******Universal click handler functionality, 
@@ -209,6 +209,18 @@ clickActions["remove-item"] = function (e) {
     //take completed items in container, divide by total
 
 };
+
+clickActions["check-item"] = function(e) {
+    var $obj = $(e.currentTarget) || $();
+    var totalEntries = $obj.closest(".colorFrameContent").find(".entryCheckbox").length;
+    var checkedEntries = $obj.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
+    var progressbar = $obj.closest(".colorFrameContent").siblings().find(".progress-bar");
+    var percent = checkedEntries / totalEntries * 100;
+
+    // update progress bar
+    progressbar.attr("aria-valuenow", '"' + percent + '"');
+    progressbar.css("width", percent + "%");
+}
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
