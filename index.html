@@ -4,101 +4,56 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>TWORKER</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="Styles/front_page.css">
-
+    <title>TWORKER</title>
 </head>
 
 <body>
-    <div class="banner">
-        <h3>
+    <header>
+        <h3 class="logo">
             <a href="index.html">Work Planner</a>
         </h3>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#home">Home</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#about">About</a>
+            </li>
+        </ul>
+    </header>
 
-        <!-- login form -->
-        <form>
-            <table>
-                <tr>
-                    <td>
-                        <label for="login-email">Email</label>
-                    </td>
-                    <td>
-                        <label for="login-password">Password</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input id="login-email" class="inputtext" name="login-email" type="email">
-                    </td>
-                    <td>
-                        <input id="login-password" class="inputtext" name="login-password" type="password">
-                    </td>
-                    <td>
-                        <!-- link made to look like a button to redirect to the app page -->
-                        <!--                        <a class="loginbtn" href="app.html">Log In</a>-->
-                        <a class="loginbtn" href="#" id="login-button" onclick="GAuthPopup()" role="button">Log In</a>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <a href="acct_recovery.html">Forgot account?</a>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-
-    <div class="content">
-        <div class="app-desc">
-            <h1>Plan your days</h1>
-            <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> -->
-            <p>Write your schedule. Set due dates. Check them off as you go. Work Planner is designed to help keep track of your schedule and productivity!</p>
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <div class="app-desc">
+                <h1><b>Plan your days.</b></h1>
+                <p>Write your schedule.
+                    Set due dates.
+                    Check them off as you go.
+                    Work Planner is designed to help keep track of your schedule and productivity!</p>
+            </div>
+            <div class="login">
+                <a class="loginbtn" href="#" id="login-button" onclick="GAuthPopup()" role="button">Sign in with
+                    Google</a>
+            </div>
         </div>
 
-        <!-- signup form -->
-        <div class="signup">
-            <form>
-                <dl>
-                    <dt>
-                        <label for="signup-email">Email</label>
-                    </dt>
-                    <dd>
-                        <input id="signup-email" class="inputtext" name="signup-email" type="email">
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <label for="signup-password>">Password</label>
-                    </dt>
-                    <dd>
-                        <input id="signup-password" class="inputtext" name="signup-password" type="password">
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>
-                        <label for="signup-password-second">Re-enter password</label>
-                    </dt>
-                    <dd>
-                        <input id="signup-password-second" class="inputtext" name="signup-password-second" type="password">
-                    </dd>
-                </dl>
-                <p>Must be at least 8 chaaracters including a number and uppercase letter.</p>
-                <button type="submit">Sign Up</button>
-            </form>
+        <div id="about" class="tab-pane fade">
+            <h1>Creators</h1>
+            <p>Daniel Phan<br>
+                Arianne Arcebal<br>
+                Kristi Chang<br>
+                Anna Nicole Tupas</p>
         </div>
     </div>
 
-
-    <!--Firebase API w/ Google Auth-->
     <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="Scripts/init-firebase.js"></script>
-
-<!--    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>-->
-
     <script src="Scripts/LoginHandler.js"></script>
 
-</body></html>
+</body>
+
+</html>
