@@ -1,6 +1,9 @@
 //$-prefix variables are Jquery objects, you can use this variable to do Jquery functions on the doc
 var $docObj = $(document.body);
 var $WeekdayContainer = $("#WeekdayContainer");
+// for settings
+var navbar = $(".navbar");
+var modals = $(".modal-content");
 //Moment.js, gets us an object of the current date/time
 var momentCurrent = moment();
 var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
@@ -26,10 +29,11 @@ hammer.on("swipeleft swiperight", function (ev) {
 
 
 //color arrays
-
 var dayOfTheWeek      = ["SUN",     "MON",     "TUE",     "WED",       "THUR",     "FRI",     "SAT"    ];
 var defaultColorAR    = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e",   "#5d65ef",  "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c",   "#a3a6f6",  "#db85ff", "#ed91c7"];
+var backgroundColor   = ["#ffffff", "#2d2d2d"];
+var textColor         = ["#000000", "#ffffff"]
 
 
 //*******Universal click handler functionality, 
@@ -76,6 +80,7 @@ $docObj.ready(function () {
     console.log("Page has loaded!");
     //    alert("Page loaded, welcome!");
 
+    loadSettings();
 
     //Display current date at the top of the week using a cloned object from Moment.js
     displayWeekTop(momentInstance);
@@ -374,26 +379,39 @@ function postColorFix() {
 }
 
 function toggleNightMode() {
-    var checkbox = $("#nightMode");
-    var navbar = $(".navbar");
-    // var modals = $(".modal-content");
-
-    if(checkbox.is(":checked")) {
-        $docObj.css("background-color", "rgb(45, 45, 45)");
-        navbar.css("color", "rgb(255, 255, 255)");
-
-        // modals.each(function() {
-        //     $(this).css("background-color", "rgb(45, 45, 45)");
-        //     $(this).css("color", "rgb(255, 255, 255)");
-        // });
+    // store colors
+    if($("#nightMode").is(":checked")) {
+        localStorage.setItem("backgroundColor", backgroundColor[1]);
+        localStorage.setItem("textColor", textColor[1]);
     }
     else {
-        $docObj.css("background-color", "rgb(255, 255, 255)");
-        navbar.css("color", "rgb(0, 0, 0)");
-
-        // modals.each(function() {
-        //     $(this).css("background-color", "rgb(255, 255, 255)");
-        //     $(this).css("color", "rgb(0, 0, 0)");
-        // });
+        localStorage.setItem("backgroundColor", backgroundColor[0]);
+        localStorage.setItem("textColor", textColor[0]);
     }
+    loadSettings();
+}
+
+function loadSettings() {
+    // set colors from local storage
+    var bgc = localStorage.getItem("backgroundColor");
+    var tc = localStorage.getItem("textColor");
+
+    $docObj.css("background-color", bgc);
+    navbar.css("color", tc);
+    modals.each(function() {
+        $(this).css("background-color", bgc);
+        $(this).css("color", tc);
+    });
+
+    // if dark mode, set slider to checked
+    if (localStorage.getItem("backgroundColor") === backgroundColor[1]) {
+        $("#nightMode").prop("checked", true);
+    }
+}
+
+function resetSettings() {
+    $("#nightMode").prop("checked", false);
+    localStorage.setItem("backgroundColor", backgroundColor[0]);
+    localStorage.setItem("textColor", textColor[0]);
+    loadSettings();
 }

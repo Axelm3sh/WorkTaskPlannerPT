@@ -70,7 +70,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-link" onclick="resetSettings()">Reset settings</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
 
@@ -92,9 +93,9 @@
                     <p>Are you sure you want to log out?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 <!--                    <a href="index.html" class="btn btn-info" role="button">Logout</a>-->
-                    <a onclick="userSignOut()" class="btn btn-info" role="button">Logout</a>
+                    <button onclick="userSignOut()" class="btn btn-primary" type="button">Logout</button>
                 </div>
             </div>
 
