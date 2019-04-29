@@ -196,6 +196,7 @@ clickActions["add-item"] = function (e) {
 
     e.stopImmediatePropagation();
 
+    updateProgressBar($target);
 };
 
 //Removing item row
@@ -207,19 +208,13 @@ clickActions["remove-item"] = function (e) {
 
     //should update the progress bar's total too.
     //take completed items in container, divide by total
-
+    updateProgressBar($obj);    // not working
 };
 
 clickActions["check-item"] = function(e) {
     var $obj = $(e.currentTarget) || $();
-    var totalEntries = $obj.closest(".colorFrameContent").find(".entryCheckbox").length;
-    var checkedEntries = $obj.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
-    var progressbar = $obj.closest(".colorFrameContent").siblings().find(".progress-bar");
-    var percent = checkedEntries / totalEntries * 100;
 
-    // update progress bar
-    progressbar.attr("aria-valuenow", '"' + percent + '"');
-    progressbar.css("width", percent + "%");
+    updateProgressBar($obj);
 }
 
 //Auto expansion/normalization, given a ColorFrameBase
@@ -426,4 +421,14 @@ function resetSettings() {
     localStorage.setItem("backgroundColor", backgroundColor[0]);
     localStorage.setItem("textColor", textColor[0]);
     loadSettings();
+}
+
+function updateProgressBar(target) {
+    var totalEntries = target.closest(".colorFrameContent").find(".entryCheckbox").length;
+    var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
+    var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
+    var percent = checkedEntries / totalEntries * 100;
+
+    progressbar.attr("aria-valuenow", '"' + percent + '"');
+    progressbar.css("width", percent + "%");
 }
