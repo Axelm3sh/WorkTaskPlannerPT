@@ -446,6 +446,10 @@ function resetSettings() {
 }
 
 function updateProgressBar(target) {
+    if (target.attr("id") == "remove-item") {
+        target = $(".expandedCol .colorFrameContent");
+    }
+
     var totalEntries = target.closest(".colorFrameContent").find(".entryCheckbox").length;
     var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
     var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
