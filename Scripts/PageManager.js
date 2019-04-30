@@ -1,6 +1,9 @@
 //$-prefix variables are Jquery objects, you can use this variable to do Jquery functions on the doc
 var $docObj = $(document.body);
 var $WeekdayContainer = $("#WeekdayContainer");
+// for settings
+var navbar = $(".navbar");
+var modals = $(".modal-content");
 //Moment.js, gets us an object of the current date/time
 var momentCurrent = moment();
 var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
@@ -26,8 +29,11 @@ hammer.on("swipeleft swiperight", function (ev) {
 
 
 //color arrays
+var dayOfTheWeek = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
+var backgroundColor = ["#ffffff", "#2d2d2d"];
+var textColor = ["#000000", "#ffffff"];
 
 
 //*******Universal click handler functionality, 
@@ -56,7 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             console.log("  Name: " + profile.displayName);
             console.log("  Email: " + profile.email);
             console.log("  Photo URL: " + profile.photoURL);
-            
+
             //swap default place holder icon with actual account photo
             $("#userIcon").attr("src", profile.photoURL);
         });
@@ -74,6 +80,7 @@ $docObj.ready(function () {
     console.log("Page has loaded!");
     //    alert("Page loaded, welcome!");
 
+    loadSettings();
 
     //Display current date at the top of the week using a cloned object from Moment.js
     displayWeekTop(momentInstance);
@@ -189,6 +196,7 @@ clickActions["add-item"] = function (e) {
 
     e.stopImmediatePropagation();
 
+    updateProgressBar($target);
 };
 
 //Removing item row
@@ -200,8 +208,14 @@ clickActions["remove-item"] = function (e) {
 
     //should update the progress bar's total too.
     //take completed items in container, divide by total
-
+    updateProgressBar($obj); // not working
 };
+
+clickActions["check-item"] = function (e) {
+    var $obj = $(e.currentTarget) || $();
+
+    updateProgressBar($obj);
+}
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
@@ -350,40 +364,97 @@ function postColorFix() {
 
     //raw text for slot exit button
     var slotExitTemplate = $("#slotExitTemplate").text();
+    //Separate object from the top nav weekday instance
+    var momentCalc = moment(momentInstance);
 
+    //Note: "index" is a value from 0-6, should calculate offsets accordingly
     $WeekdayContainer.find(".colorFrameTop").each(function (index) {
         var $top = $(this);
 
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
-        switch (index) {
-            case 0:
-                $top.html("SUNDAY").append(slotExitTemplate);
-                break;
-            case 1:
-                $top.html("MONDAY").append(slotExitTemplate);
-                break;
-            case 2:
-                $top.html("TUESDAY").append(slotExitTemplate);
-                break;
-            case 3:
-                $top.html("WEDNESDAY").append(slotExitTemplate);
-                break;
-            case 4:
-                $top.html("THURSDAY").append(slotExitTemplate);
-                break;
-            case 5:
-                $top.html("FRIDAY").append(slotExitTemplate);
-                break;
-            case 6:
-                $top.html("SATURDAY").append(slotExitTemplate);
-                break;
-            default:
-                console.log("Invalid Day!");
+        if (index >= 0 && index <= 6) {
+            if (momentInstance.day() == index) {
+                date = momentInstance.format("Do");
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            } 
+            else if (momentCurrent.day() > index) 
+            {
+                if (index == 0) //offset by one for zero index
+                {
+                    date = momentCalc.subtract(index + 1, 'days').format("Do");
+                } else {
+                    date = momentCalc.subtract(index, 'days').format("Do");
+                }
+
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            } else //day < index
+            {
+                //offset by 1
+                date = momentCalc.add(index-1, 'days').format("Do");
+                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            }
+
+            //Reset for the next iteration
+            momentCalc = moment(momentInstance);
+
+        } else {
+            console.log("Invalid Day!");
         }
     });
 
     $WeekdayContainer.find(".colorFrameContent").each(function (index) {
         $(this).css("background-color", complementColorAR[index]);
     });
+}
+
+function toggleNightMode() {
+    // store colors
+    if ($("#nightMode").is(":checked")) {
+        localStorage.setItem("backgroundColor", backgroundColor[1]);
+        localStorage.setItem("textColor", textColor[1]);
+    } else {
+        localStorage.setItem("backgroundColor", backgroundColor[0]);
+        localStorage.setItem("textColor", textColor[0]);
+    }
+    loadSettings();
+}
+
+function loadSettings() {
+    // set colors from local storage
+    var bgc = localStorage.getItem("backgroundColor");
+    var tc = localStorage.getItem("textColor");
+
+    $docObj.css("background-color", bgc);
+    navbar.css("color", tc);
+    modals.each(function () {
+        $(this).css("background-color", bgc);
+        $(this).css("color", tc);
+    });
+
+    // if dark mode, set slider to checked
+    if (localStorage.getItem("backgroundColor") === backgroundColor[1]) {
+        $("#nightMode").prop("checked", true);
+    }
+}
+
+function resetSettings() {
+    $("#nightMode").prop("checked", false);
+    localStorage.setItem("backgroundColor", backgroundColor[0]);
+    localStorage.setItem("textColor", textColor[0]);
+    loadSettings();
+}
+
+function updateProgressBar(target) {
+    if (target.attr("id") == "remove-item") {
+        target = $(".expandedCol .colorFrameContent");
+    }
+
+    var totalEntries = target.closest(".colorFrameContent").find(".entryCheckbox").length;
+    var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
+    var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
+    var percent = checkedEntries / totalEntries * 100;
+
+    progressbar.attr("aria-valuenow", '"' + percent + '"');
+    progressbar.css("width", percent + "%");
 }
