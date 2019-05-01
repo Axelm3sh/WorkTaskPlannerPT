@@ -24,7 +24,7 @@ hammer.on("swipeleft swiperight", function (ev) {
 //    });
 //});
 
-
+//Reference to firebase DB, unset if not signed in...
 var fireDB;
 
 
@@ -101,7 +101,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-//
+//Checks to see if the reference to the DB is set or not, returns false if current user is not authenticated or when the refernce is not set. Otherwise it is true.
 function checkDB() {
     var value = false;
 
@@ -499,7 +499,11 @@ function updateProgressBar(target) {
     var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
     var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
     var percent = checkedEntries / totalEntries * 100;
-
+    if(isNaN(percent)) //no items in list
+        {
+            percent = 0;
+        }
+    
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");
 }
