@@ -29,7 +29,6 @@ var fireDB;
 
 
 //color arrays
-var dayOfTheWeek = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
 var backgroundColor = ["#ffffff", "#2d2d2d"];
@@ -232,6 +231,7 @@ clickActions["exit-day-slot"] = function (e) {
     e.stopImmediatePropagation();
 };
 
+//Adds a typey note to the day
 clickActions["add-item"] = function (e) {
     var $target = $(e.currentTarget) || $();
 
@@ -419,26 +419,15 @@ function postColorFix() {
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
         if (index >= 0 && index <= 6) {
-            if (momentInstance.day() == index) {
-                date = momentInstance.format("Do");
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
-            } 
-            else if (momentCurrent.day() > index) 
-            {
-                if (index == 0) //offset by one for zero index
+            
+            //Moment.js calculates day offset
+            momentCalc.day(index);
+            $top.html(momentCalc.format("ddd Do")).append(slotExitTemplate);
+            
+            if(momentCurrent.isSame(momentCalc))
                 {
-                    date = momentCalc.subtract(index + 1, 'days').format("Do");
-                } else {
-                    date = momentCalc.subtract(index, 'days').format("Do");
+                    $top.addClass("border border-info rounded");
                 }
-
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
-            } else //day < index
-            {
-                //offset by 1
-                date = momentCalc.add(index-1, 'days').format("Do");
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
-            }
 
             //Reset for the next iteration
             momentCalc = moment(momentInstance);
