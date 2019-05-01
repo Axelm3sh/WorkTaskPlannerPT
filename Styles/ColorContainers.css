@@ -43,7 +43,7 @@
    }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 600px) {
   /*Entire Week container, set to flex to allow all direct descendants to create horizontal slices*/
   .WeekFlex {
       display: flex;
