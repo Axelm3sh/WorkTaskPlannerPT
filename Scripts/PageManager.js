@@ -78,21 +78,23 @@ firebase.auth().onAuthStateChanged(function (user) {
                 fireDB.collection("users").doc(profile.uid).get()
                     .then(function (dbUserDoc) {
                         //Checks if the document (the user directory) exists
-                        if (dbUserDoc.exists) 
-                        {
+                        if (dbUserDoc.exists) {
                             console.log("Doc Data: ", dbUserDoc.data());
-                            
-//                            console.log(dbUserDoc.docs);
+
                             //test
                             getNotes(2019, 18, profile.uid);
                             
-                            
+                            //Note, can get provider's uid from
+                            //firebase.auth().currentUser.providerData[0].uid
+
+
                         } else {
                             console.log("user does not exist, creating new...");
-                            firstTimeInitializeUser(profile.uid);
+                            
+                            firstTimeInitializeUser(2019, 18, profile);
 
                         }
-                    })
+                    });
 
             } //end checkDB
         });
@@ -105,20 +107,23 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-function getNotes(year, weekNumber, profileId)
-{
-    fireDB.collection("users").doc(profileId).collection("notes").doc(year+ "-"+ weekNumber).get().then(function (extract){
+function getNotes(year, weekNumber, profileId) {
+    fireDB.collection("users").doc(profileId).collection("notes").doc(year + "-" + weekNumber).get().then(function (extract) {
         console.log(extract.data());
     });
 }
 
-function firstTimeInitializeUser(userId)
-{
-     fireDB.collection("users").doc(userId).set({
-                                email: profile.email
-                            });
+function firstTimeInitializeUser(currYear, currWeek, userProfile) {
+    fireDB.collection("users").doc(userProfile.uid).set({
+        email: userProfile.email
+    });
 
-    fireDB.collection("users").doc(userId).collection("notes").add({});
+    //Blank fields for the content
+    var initDoc = {
+        content: [],
+        isChecked: []
+    };
+    fireDB.collection("users").doc(userProfile.uid).collection("notes").doc(currYear+"-"+currWeek).set(initDoc);
 }
 
 //Checks to see if the reference to the DB is set or not, returns false if current user is not authenticated or when the refernce is not set. Otherwise it is true.
