@@ -71,25 +71,30 @@ firebase.auth().onAuthStateChanged(function (user) {
                 fireDB = firebase.firestore();
 
                 //testing
-//                fireDB.collection("users").get().then(function(docs){
-//                    //docs has different "users"
-////                    docs.forEach()
-//                });        
+                //                fireDB.collection("users").get().then(function(docs){
+                //                    //docs has different "users"
+                ////                    docs.forEach()
+                //                });        
                 fireDB.collection("users").doc(profile.uid).get()
-                    .then(function(dbDoc){
-                    //Checks if the document (the user directory) exists
-                    if(dbDoc.exists)
+                    .then(function (dbUserDoc) {
+                        //Checks if the document (the user directory) exists
+                        if (dbUserDoc.exists) 
                         {
-                            console.log("Doc Data: ", dbDoc.data());
+                            console.log("Doc Data: ", dbUserDoc.data());
+                            
+//                            console.log(dbUserDoc.docs);
+                            //test
+                            getNotes(2019, 18, profile.uid);
+                            
+                            
+                        } else {
+                            console.log("user does not exist, creating new...");
+                            firstTimeInitializeUser(profile.uid);
+
                         }
-                    else
-                    {
-                        console.log("user does not exist, creating new...");
-                        fireDB.collection("users").doc(profile.uid).set({email: profile.email});
-                    }
-                })
-                
-            }//end checkDB
+                    })
+
+            } //end checkDB
         });
 
     } else {
@@ -99,6 +104,22 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.location.href = "index.html";
     }
 });
+
+function getNotes(year, weekNumber, profileId)
+{
+    fireDB.collection("users").doc(profileId).collection("notes").doc(year+ "-"+ weekNumber).get().then(function (extract){
+        console.log(extract.data());
+    });
+}
+
+function firstTimeInitializeUser(userId)
+{
+     fireDB.collection("users").doc(userId).set({
+                                email: profile.email
+                            });
+
+    fireDB.collection("users").doc(userId).collection("notes").add({});
+}
 
 //Checks to see if the reference to the DB is set or not, returns false if current user is not authenticated or when the refernce is not set. Otherwise it is true.
 function checkDB() {
@@ -419,15 +440,14 @@ function postColorFix() {
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
         if (index >= 0 && index <= 6) {
-            
+
             //Moment.js calculates day offset
             momentCalc.day(index);
             $top.html(momentCalc.format("ddd Do")).append(slotExitTemplate);
-            
-            if(momentCurrent.isSame(momentCalc))
-                {
-                    $top.addClass("border border-info rounded");
-                }
+
+            if (momentCurrent.isSame(momentCalc)) {
+                $top.addClass("border border-info rounded");
+            }
 
             //Reset for the next iteration
             momentCalc = moment(momentInstance);
@@ -488,11 +508,11 @@ function updateProgressBar(target) {
     var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
     var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
     var percent = checkedEntries / totalEntries * 100;
-    if(isNaN(percent)) //no items in list
-        {
-            percent = 0;
-        }
-    
+    if (isNaN(percent)) //no items in list
+    {
+        percent = 0;
+    }
+
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");
 }
