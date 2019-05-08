@@ -288,11 +288,9 @@ clickActions["add-item"] = function (e) {
 //    $target.closest(".colorFrameContent").append(itemTemplate);
     $target.parent().before(itemTemplate);
 
-    var calendar = $target.parent().find("#due-date:last-child");
-    calendar.datepicker();
-    console.log(calendar);
-
     e.stopImmediatePropagation();
+
+    calendarDropdown();
 
     updateProgressBar($target);
 };
@@ -315,16 +313,6 @@ clickActions["check-item"] = function (e) {
 
     updateProgressBar($obj);
 };
-
-// Setting a due date for tasks
-clickActions["due-date"] = function (e) {
-    var $obj = $(e.currentTarget) || $();
-
-    // get date
-
-    console.log($obj);
-} 
-
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
@@ -542,7 +530,9 @@ function resetSettings() {
     loadSettings();
 }
 
+// updates progress bar after adding item, removing item, and checking item
 function updateProgressBar(target) {
+
     if (target.attr("id") == "remove-item") {
         target = $(".expandedCol .colorFrameContent");
     }
@@ -558,4 +548,18 @@ function updateProgressBar(target) {
 
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");
+}
+
+// provide functionality to calendar button
+function calendarDropdown() {
+    var calendar = $(".expandedCol .colorFrameContent #due-date").last();
+
+    calendar.datepicker({
+        format: "yyyy-mm-dd",
+        todayHighlight: true,
+        clearBtn: true,
+        startDate: "0d"
+    }).on("changeDate", function (ev) {
+        console.log(ev.date);
+    });
 }
