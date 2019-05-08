@@ -153,8 +153,13 @@ function firstTimeInitializeUser(currYear, currWeek, userProfile) {
 
     //Blank fields for the content
     var initDoc = {
-        content: [],
-        isChecked: []
+        sunday: {content: [], isChecked: [], dueDate: []},
+        monday: {content: [], isChecked: [], dueDate: []},
+        tuesday: {content: [], isChecked: [], dueDate: []},
+        wednesday: {content: [], isChecked: [], dueDate: []},
+        thursday: {content: [], isChecked: [], dueDate: []},
+        friday: {content: [], isChecked: [], dueDate: []},
+        saturday: {content: [], isChecked: [], dueDate: []}
     };
     fireDB.collection("users").doc(userProfile.uid).collection("notes").doc(currYear+"-"+currWeek).set(initDoc);
 }
