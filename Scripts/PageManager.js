@@ -11,6 +11,8 @@ var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
 var hammer = new Hammer(document.getElementById("WeekdayContainer"));
 hammer.on("swipeleft swiperight", function (ev) {
     console.log(ev.type + " detected");
+    
+    
 });
 //Testing hammer function, gestures not yet implemented
 //$('.img-item').each(function(){
@@ -80,8 +82,9 @@ firebase.auth().onAuthStateChanged(function (user) {
 
                             //Set reference to the collection
                             userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
+                            
                             //test
-                            getNotes(2019, 18, userNotesCollection);
+                            getNotes(momentCurrent.year(), momentCurrent.week(), userNotesCollection);
                             
                             //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
 
@@ -89,7 +92,8 @@ firebase.auth().onAuthStateChanged(function (user) {
                         } else {
                             console.log("user does not exist, creating new...");
                             
-                            firstTimeInitializeUser(2019, 18, profile);
+                            //Make a blank week document                            
+                            firstTimeInitializeUser(momentCurrent.year(), momentCurrent.week(), profile);
 
                         }
                     });
@@ -113,13 +117,14 @@ function getNotes(year, weekNumber, noteCollectionRef) {
           if(docs.exists)
           {
               console.log(docs.data());
+              //do something with content
           }
           else
           {
-              
+              //No notes for this week
           }
           
-        console.log(docs.data());
+        //console.log(docs.data());
     })
     .catch(function(error) {
           alert("Error fetching notes: ", error);
@@ -130,8 +135,14 @@ function getNotes(year, weekNumber, noteCollectionRef) {
 //TEST
 function writeNotes(content, profileId)
 {
+    var contentObj =
+        {
+            
+        };
+    
+    
 //    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-    userNotesCollection;
+    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update();
     
 }
 
@@ -163,9 +174,6 @@ function checkDB() {
     return value;
 }
 
-function userFirstTimeCheck() {
-
-}
 
 //JQUERY ready is similar to window.onload except it occurs earlier
 $docObj.ready(function () {
@@ -212,6 +220,7 @@ clickActions["prev-week"] = function (e) {
     loadTemplate();
 };
 
+//Jump to current week
 clickActions["current-week"] = function (e) {
 
     displayWeekTop(momentCurrent);
