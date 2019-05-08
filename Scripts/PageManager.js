@@ -288,6 +288,10 @@ clickActions["add-item"] = function (e) {
 //    $target.closest(".colorFrameContent").append(itemTemplate);
     $target.parent().before(itemTemplate);
 
+    var calendar = $target.parent().find("#due-date:last-child");
+    calendar.datepicker();
+    console.log(calendar);
+
     e.stopImmediatePropagation();
 
     updateProgressBar($target);
@@ -305,11 +309,22 @@ clickActions["remove-item"] = function (e) {
     updateProgressBar($obj); // not working
 };
 
+// Checking a task as finished
 clickActions["check-item"] = function (e) {
     var $obj = $(e.currentTarget) || $();
 
     updateProgressBar($obj);
 };
+
+// Setting a due date for tasks
+clickActions["due-date"] = function (e) {
+    var $obj = $(e.currentTarget) || $();
+
+    // get date
+
+    console.log($obj);
+} 
+
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
