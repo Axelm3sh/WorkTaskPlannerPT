@@ -24,12 +24,13 @@ hammer.on("swipeleft swiperight", function (ev) {
 //    });
 //});
 
-
-//var fireDB;
+//Reference to firebase DB, unset if not signed in...
+var fireDB;
+//Reference to the user's note collection
+var userNotesCollection;
 
 
 //color arrays
-var dayOfTheWeek = ["SUN", "MON", "TUE", "WED", "THUR", "FRI", "SAT"];
 var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
 var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
 var backgroundColor = ["#ffffff", "#2d2d2d"];
@@ -65,6 +66,35 @@ firebase.auth().onAuthStateChanged(function (user) {
 
             //swap default place holder icon with actual account photo
             $("#userIcon").attr("src", profile.photoURL);
+
+            //setup database reference if we signed in...
+            if (checkDB()) {
+                //                fireDB = firebase.database(); //OMG WRONG API NO WONDER
+                fireDB = firebase.firestore();
+       
+                fireDB.collection("users").doc(profile.uid).get()
+                    .then(function (dbUserDoc) {
+                        //Checks if the document (the user directory) exists
+                        if (dbUserDoc.exists) {
+                            console.log("Doc Data: ", dbUserDoc.data());
+
+                            //Set reference to the collection
+                            userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
+                            //test
+                            getNotes(2019, 18, userNotesCollection);
+                            
+                            //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
+
+
+                        } else {
+                            console.log("user does not exist, creating new...");
+                            
+                            firstTimeInitializeUser(2019, 18, profile);
+
+                        }
+                    });
+
+            } //end checkDB
         });
 
     } else {
@@ -74,6 +104,68 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.location.href = "index.html";
     }
 });
+
+function getNotes(year, weekNumber, noteCollectionRef) {
+    
+      noteCollectionRef.doc(year + "-" + weekNumber).get()
+          .then(function (docs) { //At this level we're reading the document
+          
+          if(docs.exists)
+          {
+              console.log(docs.data());
+          }
+          else
+          {
+              
+          }
+          
+        console.log(docs.data());
+    })
+    .catch(function(error) {
+          alert("Error fetching notes: ", error);
+      });
+    
+}
+
+//TEST
+function writeNotes(content, profileId)
+{
+//    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+    userNotesCollection;
+    
+}
+
+function firstTimeInitializeUser(currYear, currWeek, userProfile) {
+    fireDB.collection("users").doc(userProfile.uid).set({
+        email: userProfile.email
+    });
+
+    //Blank fields for the content
+    var initDoc = {
+        content: [],
+        isChecked: []
+    };
+    fireDB.collection("users").doc(userProfile.uid).collection("notes").doc(currYear+"-"+currWeek).set(initDoc);
+}
+
+//Checks to see if the reference to the DB is set or not, returns false if current user is not authenticated or when the refernce is not set. Otherwise it is true.
+function checkDB() {
+    var value = false;
+
+    if (firebase.auth().currentUser !== null) {
+        if (fireDB !== null) {
+            value = true;
+        } else {
+            value = false;
+        }
+    }
+
+    return value;
+}
+
+function userFirstTimeCheck() {
+
+}
 
 //JQUERY ready is similar to window.onload except it occurs earlier
 $docObj.ready(function () {
@@ -187,12 +279,14 @@ clickActions["exit-day-slot"] = function (e) {
     e.stopImmediatePropagation();
 };
 
+//Adds a typey note to the day
 clickActions["add-item"] = function (e) {
     var $target = $(e.currentTarget) || $();
 
     var itemTemplate = $("#itemTaskTemplate").text();
 
-    $target.closest(".colorFrameContent").append(itemTemplate);
+//    $target.closest(".colorFrameContent").append(itemTemplate);
+    $target.parent().before(itemTemplate);
 
     e.stopImmediatePropagation();
 
@@ -215,7 +309,7 @@ clickActions["check-item"] = function (e) {
     var $obj = $(e.currentTarget) || $();
 
     updateProgressBar($obj);
-}
+};
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
@@ -374,25 +468,13 @@ function postColorFix() {
         $top.css("background-color", defaultColorAR[index]);
         //load the day names for the week
         if (index >= 0 && index <= 6) {
-            if (momentInstance.day() == index) {
-                date = momentInstance.format("Do");
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
-            } 
-            else if (momentCurrent.day() > index) 
-            {
-                if (index == 0) //offset by one for zero index
-                {
-                    date = momentCalc.subtract(index + 1, 'days').format("Do");
-                } else {
-                    date = momentCalc.subtract(index, 'days').format("Do");
-                }
 
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
-            } else //day < index
-            {
-                //offset by 1
-                date = momentCalc.add(index-1, 'days').format("Do");
-                $top.html(dayOfTheWeek[index] + " " + date).append(slotExitTemplate);
+            //Moment.js calculates day offset
+            momentCalc.day(index);
+            $top.html(momentCalc.format("ddd Do")).append(slotExitTemplate);
+
+            if (momentCurrent.isSame(momentCalc)) {
+                $top.addClass("border border-info rounded");
             }
 
             //Reset for the next iteration
@@ -454,6 +536,10 @@ function updateProgressBar(target) {
     var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
     var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
     var percent = checkedEntries / totalEntries * 100;
+    if (isNaN(percent)) //no items in list
+    {
+        percent = 0;
+    }
 
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");

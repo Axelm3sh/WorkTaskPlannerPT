@@ -146,8 +146,8 @@
             <div class="contentShortContainer" data-visible="true">My super cool abbreviated list of stuff will go here</div>
             <div class="dropdown-divider"></div>
             <!--            -->
-            <div class="contentExpandedContainer float-right" data-visible="false">
-                <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
+            <div class="contentExpandedContainer" data-visible="false">
+                <a class="btn btn-primary float-right" role=button data-click="add-item"><span class="fa fa-plus-circle fa-lg"></span></a>
             </div>
         </div>
         <div class="colorFrameBottom">
@@ -168,11 +168,12 @@
     <script type="text/html" id="itemTaskTemplate">
         <div class="contentExpandedContainer entry input-group" data-visible="false">
             <div class="input-group-prepend">
-                <input type="checkbox" aria-label="checkbox for item" class="entryCheckbox" data-click="check-item">
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="checkbox for item" class="entryCheckbox" data-click="check-item">
+                </div>
             </div>
-            <textarea class="form-control" type="text" placeholder="Test Item! Put Text Here."></textarea>
+            <textarea class="form-control" type="text" placeholder="Type Your Task or Note!"></textarea>
             <div class="input-group-append">
-                <button id="save-item" class="btn btn-outline-info" data-click="save-item" type="button"><span class="fa fa-save"></span></button>
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
         </div>
