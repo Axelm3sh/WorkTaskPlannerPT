@@ -112,11 +112,11 @@ function getNotes(year, weekNumber, noteCollectionRef) {
           
           if(docs.exists)
           {
-              
+              console.log(docs.data());
           }
           else
           {
-
+              
           }
           
         console.log(docs.data());
