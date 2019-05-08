@@ -26,6 +26,8 @@ hammer.on("swipeleft swiperight", function (ev) {
 
 //Reference to firebase DB, unset if not signed in...
 var fireDB;
+//Reference to the user's note collection
+var userNotesCollection;
 
 
 //color arrays
@@ -69,23 +71,19 @@ firebase.auth().onAuthStateChanged(function (user) {
             if (checkDB()) {
                 //                fireDB = firebase.database(); //OMG WRONG API NO WONDER
                 fireDB = firebase.firestore();
-
-                //testing
-                //                fireDB.collection("users").get().then(function(docs){
-                //                    //docs has different "users"
-                ////                    docs.forEach()
-                //                });        
+       
                 fireDB.collection("users").doc(profile.uid).get()
                     .then(function (dbUserDoc) {
                         //Checks if the document (the user directory) exists
                         if (dbUserDoc.exists) {
                             console.log("Doc Data: ", dbUserDoc.data());
 
+                            //Set reference to the collection
+                            userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
                             //test
-                            getNotes(2019, 18, profile.uid);
+                            getNotes(2019, 18, userNotesCollection);
                             
-                            //Note, can get provider's uid from
-                            //firebase.auth().currentUser.providerData[0].uid
+                            //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
 
 
                         } else {
@@ -107,10 +105,34 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-function getNotes(year, weekNumber, profileId) {
-    fireDB.collection("users").doc(profileId).collection("notes").doc(year + "-" + weekNumber).get().then(function (extract) {
-        console.log(extract.data());
-    });
+function getNotes(year, weekNumber, noteCollectionRef) {
+    
+      noteCollectionRef.doc(year + "-" + weekNumber).get()
+          .then(function (docs) { //At this level we're reading the document
+          
+          if(docs.exists)
+          {
+              
+          }
+          else
+          {
+
+          }
+          
+        console.log(docs.data());
+    })
+    .catch(function(error) {
+          alert("Error fetching notes: ", error);
+      });
+    
+}
+
+//TEST
+function writeNotes(content, profileId)
+{
+//    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+    userNotesCollection;
+    
 }
 
 function firstTimeInitializeUser(currYear, currWeek, userProfile) {
@@ -263,7 +285,8 @@ clickActions["add-item"] = function (e) {
 
     var itemTemplate = $("#itemTaskTemplate").text();
 
-    $target.closest(".colorFrameContent").append(itemTemplate);
+//    $target.closest(".colorFrameContent").append(itemTemplate);
+    $target.parent().before(itemTemplate);
 
     e.stopImmediatePropagation();
 
@@ -286,7 +309,7 @@ clickActions["check-item"] = function (e) {
     var $obj = $(e.currentTarget) || $();
 
     updateProgressBar($obj);
-}
+};
 
 //Auto expansion/normalization, given a ColorFrameBase
 function toggleExpansion(element) {
