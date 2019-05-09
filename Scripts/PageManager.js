@@ -84,7 +84,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                             userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
                             
                             //test
-                            getNotes(momentCurrent.year(), momentCurrent.week(), userNotesCollection);
+                            getAllNotes(momentCurrent.year(), momentCurrent.week(), userNotesCollection);
                             
                             //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
 
@@ -109,7 +109,8 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-function getNotes(year, weekNumber, noteCollectionRef) {
+//GET All Notes for the week, populate the slots
+function getAllNotes(year, weekNumber, noteCollectionRef) {
     
       noteCollectionRef.doc(year + "-" + weekNumber).get()
           .then(function (docs) { //At this level we're reading the document
@@ -124,10 +125,10 @@ function getNotes(year, weekNumber, noteCollectionRef) {
               
               
           }
-          else
-          {
-              //No notes for this week
-          }
+//          else
+//          {
+//              //No notes for this week
+//          }
           
         //console.log(docs.data());
     })
@@ -138,7 +139,7 @@ function getNotes(year, weekNumber, noteCollectionRef) {
 }
 
 //typically content is the .colorFrameBase of the day slot...
-function writeNotes(content)
+function postNotesByDay(content)
 {
     content = content || $();
     var contentObj = {};
@@ -307,7 +308,7 @@ clickActions["exit-day-slot"] = function (e) {
     console.log("slot exit parent is: " + $currSlot);
     
     //when we close the current day, write the notes to the DB
-    writeNotes($currSlot);
+    postNotesByDay($currSlot);
 
     //toggleExpansion($currSlot);
     frameNormalizeAll();
@@ -465,7 +466,7 @@ function loadTemplate() {
         $tempDaySlot.css("zIndex", 8 - i);
     }
 
-    postColorFix();
+    ColorFix();
 
     initialHiddenElements();
 
@@ -502,7 +503,7 @@ function fadeInElement(param) {
 
 //Fixes the colors of the frames once it loads
 //Maybe add a color selector thing down the line or parse colors from input
-function postColorFix() {
+function ColorFix() {
 
     //raw text for slot exit button
     var slotExitTemplate = $("#slotExitTemplate").text();
