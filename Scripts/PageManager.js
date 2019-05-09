@@ -249,8 +249,6 @@ clickActions["day-slot"] = function (e) {
             $(this).hide();
         });
     }
-
-
 };
 
 clickActions["exit-day-slot"] = function (e) {
@@ -560,6 +558,10 @@ function calendarDropdown() {
         clearBtn: true,
         startDate: "0d"
     }).on("changeDate", function (ev) {
-        console.log(ev.date);
+        var strDate = ev.date.toISOString();
+        strDate = strDate.substring(0, strDate.indexOf("T"));
+
+        // add date attribute to container
+        calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
     });
 }
