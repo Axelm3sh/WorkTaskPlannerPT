@@ -116,8 +116,13 @@ function getNotes(year, weekNumber, noteCollectionRef) {
           
           if(docs.exists)
           {
-              console.log(docs.data());
-              //do something with content
+              var currWeekData = docs.data();
+              
+              console.log(currWeekData.friday);
+              //iterate thru afdsgh
+              
+              
+              
           }
           else
           {
@@ -142,7 +147,7 @@ function writeNotes(content, profileId)
     
     
 //    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update();
+    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj);
     
 }
 
