@@ -137,17 +137,41 @@ function getNotes(year, weekNumber, noteCollectionRef) {
     
 }
 
-//TEST
-function writeNotes(content, profileId)
+//typically content is the .colorFrameBase of the day slot...
+function writeNotes(content)
 {
-    var contentObj =
-        {
-            
-        };
+    content = content || $();
+    var contentObj = {};
     
+    var day = content.find(".colorFrameTop").attr("data-dayValue").toLowerCase();
+    
+    contentObj[day] = { 
+        content:[], 
+        isChecked:[], 
+        dueDate:[] 
+    };
+    
+    //Iterate thru content and find the input data
+    content.find(".contentExpandedContainer.entry").each(function (index) {
+        
+        //Check if we checked off the task
+        if($(this).find("input").is(":checked"))
+        {
+            contentObj[day]["isChecked"][index] = true;
+        }
+        else
+        {
+            contentObj[day]["isChecked"][index] = false;
+        }
+        
+        contentObj[day]["content"][index] = $(this).children("textarea").val();
+        
+    })
+
+    console.log("day contents is: ", contentObj);
     
 //    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj);
+    //userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj);
     
 }
 
@@ -166,6 +190,8 @@ function firstTimeInitializeUser(currYear, currWeek, userProfile) {
         friday: {content: [], isChecked: [], dueDate: []},
         saturday: {content: [], isChecked: [], dueDate: []}
     };
+    
+    //var test = initDoc["sunday"]["isChecked"][0];
     fireDB.collection("users").doc(userProfile.uid).collection("notes").doc(currYear+"-"+currWeek).set(initDoc);
 }
 
@@ -279,6 +305,9 @@ clickActions["exit-day-slot"] = function (e) {
     //search for Closest container
     var $currSlot = $target.closest(".colorFrameBase");
     console.log("slot exit parent is: " + $currSlot);
+    
+    //when we close the current day, write the notes to the DB
+    writeNotes($currSlot);
 
     //toggleExpansion($currSlot);
     frameNormalizeAll();
@@ -490,7 +519,11 @@ function postColorFix() {
 
             //Moment.js calculates day offset
             momentCalc.day(index);
+            
             $top.html(momentCalc.format("ddd Do")).append(slotExitTemplate);
+            
+            //Insert the day value for searching down the line
+            $top.attr("data-dayValue", momentCalc.format("dddd"));
 
             if (momentCurrent.isSame(momentCalc)) {
                 $top.addClass("border border-info rounded");
