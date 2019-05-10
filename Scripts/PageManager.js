@@ -78,7 +78,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                     .then(function (dbUserDoc) {
                         //Checks if the document (the user directory) exists
                         if (dbUserDoc.exists) {
-                            console.log("Doc Data: ", dbUserDoc.data());
+                            //console.log("Doc Data: ", dbUserDoc.data());
 
                             //Set reference to the collection
                             userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
@@ -92,7 +92,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                         } else {
                             console.log("user does not exist, creating new...");
                             
-                            //Make a blank week document                            
+                            //Make a blank week document       
                             firstTimeInitializeUser(momentCurrent.year(), momentCurrent.week(), profile);
 
                         }
@@ -121,7 +121,22 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
               
               console.log(currWeekData.friday);
               //iterate thru afdsgh
+              var itemTemplate = $("#itemTaskTemplate").text();
               
+              $WeekdayContainer.find(".colorFrameContent")
+                  .each(function(index){
+                  
+                  //Get button's parent and follow the same procedure as add-item
+                  
+                  currWeekData.friday.content
+                      .forEach(function(contentItem){
+                      
+                      //using the itemTemplate, insert then select the new element and populate with data(contentItem)...
+                      
+                  });
+                  
+                  
+              });
               
               
           }
@@ -130,7 +145,6 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
 //              //No notes for this week
 //          }
           
-        //console.log(docs.data());
     })
     .catch(function(error) {
           alert("Error fetching notes: ", error);
@@ -503,6 +517,7 @@ function fadeInElement(param) {
 
 //Fixes the colors of the frames once it loads
 //Maybe add a color selector thing down the line or parse colors from input
+//Also sets other variables during the date calculation
 function ColorFix() {
 
     //raw text for slot exit button
