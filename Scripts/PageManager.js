@@ -309,8 +309,6 @@ clickActions["day-slot"] = function (e) {
             $(this).hide();
         });
     }
-
-
 };
 
 clickActions["exit-day-slot"] = function (e) {
@@ -353,6 +351,8 @@ clickActions["add-item"] = function (e) {
 
     e.stopImmediatePropagation();
 
+    calendarDropdown();
+
     updateProgressBar($target);
 };
 
@@ -368,6 +368,7 @@ clickActions["remove-item"] = function (e) {
     updateProgressBar($obj); // not working
 };
 
+// Checking a task as finished
 clickActions["check-item"] = function (e) {
     var $obj = $(e.currentTarget) || $();
 
@@ -595,7 +596,9 @@ function resetSettings() {
     loadSettings();
 }
 
+// updates progress bar after adding item, removing item, and checking item
 function updateProgressBar(target) {
+
     if (target.attr("id") == "remove-item") {
         target = $(".expandedCol .colorFrameContent");
     }
@@ -611,4 +614,22 @@ function updateProgressBar(target) {
 
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");
+}
+
+// provide functionality to calendar button
+function calendarDropdown() {
+    var calendar = $(".expandedCol .colorFrameContent #due-date").last();
+
+    calendar.datepicker({
+        format: "yyyy-mm-dd",
+        todayHighlight: true,
+        clearBtn: true,
+        startDate: "0d"
+    }).on("changeDate", function (ev) {
+        var strDate = ev.date.toISOString();
+        strDate = strDate.substring(0, strDate.indexOf("T"));
+
+        // add date attribute to container
+        calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
+    });
 }
