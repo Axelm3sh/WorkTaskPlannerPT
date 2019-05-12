@@ -8,23 +8,6 @@ var modals = $(".modal-content");
 var momentCurrent = moment();
 var momentInstance = moment(momentCurrent); //Cloned copy for modifying +- weeks
 
-var hammer = new Hammer(document.getElementById("WeekdayContainer"));
-hammer.on("swipeleft swiperight", function (ev) {
-    console.log(ev.type + " detected");
-    
-    
-});
-//Testing hammer function, gestures not yet implemented
-//$('.img-item').each(function(){
-//    var $this = $(this);
-//    var mc = new Hammer(this);
-//    mc.on("doubletap", function() {
-//        console.log('Double tap!');
-//        alert('Double tap!');
-//        $this.toggleClass('liked');
-//        return false;
-//    });
-//});
 
 //Reference to firebase DB, unset if not signed in...
 var fireDB;
@@ -83,8 +66,9 @@ firebase.auth().onAuthStateChanged(function (user) {
                             //Set reference to the collection
                             userNotesCollection = fireDB.collection("users/" + profile.uid + "/notes");
                             
-                            //test
+                            //get all notes for the week
                             getAllNotes(momentCurrent.year(), momentCurrent.week(), userNotesCollection);
+                            
                             
                             //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
 
@@ -112,9 +96,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 //GET All Notes for the week, populate the slots
 function getAllNotes(year, weekNumber, noteCollectionRef) {
     
-      noteCollectionRef.doc(year + "-" + weekNumber).get()
-          .then(function (docs) { //At this level we're reading the document
-          
+      noteCollectionRef.doc(year + "-" + weekNumber).get().then(function (docs) { //At this level we're reading the document
           if(docs.exists)
           {
               var currWeekData = docs.data();
@@ -126,19 +108,33 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
               $WeekdayContainer.find(".colorFrameContent")
                   .each(function(index){
                   
-                  //Get button's parent and follow the same procedure as add-item
+                  //Get the day from the topFrame
+                  var day = $(this).siblings(".colorFrameTop").attr("data-dayValue").toLowerCase();
+                  var $contentContainer = $(this);
                   
-                  currWeekData.friday.content
-                      .forEach(function(contentItem){
+                  $.each(currWeekData[day].content, function(cIndex, cItem){
                       
+                      //Get button's parent and follow the same procedure as add-item
+                      $contentContainer.find("#addButton").parent().before(itemTemplate);
                       //using the itemTemplate, insert then select the new element and populate with data(contentItem)...
+                      var $newestEntry = $contentContainer.find(".contentExpandedContainer.entry").last();
                       
-                  });
+                      //Text
+                      $newestEntry.children("textarea").val(cItem);
+                      //Check box
+                      $newestEntry.find("input").prop("checked", currWeekData[day].isChecked[cIndex]);
+                      //Due Date
+                      $newestEntry.attr("data-dueDate", currWeekData[day].dueDate[cIndex]);
+                      
+                  }); //Inner content populate
                   
+                  //Restore previous progress
+                  updateProgressBar($contentContainer);
                   
-              });
+              }); //Day Slot populate   
               
-              
+                //Load and hide...again
+                initialHiddenElements();
           }
 //          else
 //          {
@@ -169,24 +165,38 @@ function postNotesByDay(content)
     //Iterate thru content and find the input data
     content.find(".contentExpandedContainer.entry").each(function (index) {
         
-        //Check if we checked off the task
-        if($(this).find("input").is(":checked"))
+        //Skip saving empty text boxes
+        if( !isNullOrWhitespace($(this).children("textarea").val()) )
         {
-            contentObj[day]["isChecked"][index] = true;
-        }
-        else
-        {
-            contentObj[day]["isChecked"][index] = false;
-        }
-        
-        contentObj[day]["content"][index] = $(this).children("textarea").val();
-        
-    })
+            contentObj[day].content.push( $(this).children("textarea").val() );
 
-    console.log("day contents is: ", contentObj);
+            //Check if we checked off the task
+            if($(this).find("input").is(":checked"))
+            {
+                contentObj[day].isChecked.push( true );
+            }
+            else
+            {
+                contentObj[day].isChecked.push( false );
+            }
+
+            contentObj[day].dueDate.push( $(this).data("duedate") );
+        }
+        
+    });
+
+    //console.log("day contents is: ", contentObj);
     
-//    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-    //userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj);
+    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj)
+    .then(function()
+    {
+        console.log("successfully updated notes!");
+    })
+    .catch(function(err)
+    {
+        alert("Error occured while Writing notes: ", err);
+    });
     
 }
 
@@ -225,6 +235,11 @@ function checkDB() {
     return value;
 }
 
+//Check for null or whitespace in string
+ function isNullOrWhitespace( input ) {
+     return !input || input.replace(/\s/g, '').length < 1;
+ }
+
 
 //JQUERY ready is similar to window.onload except it occurs earlier
 $docObj.ready(function () {
@@ -250,7 +265,7 @@ window.onload = function () {
 //************Click Actions**********
 //example, look at index.html nav notification button
 clickActions["notification"] = function (e) {
-    alert("You clicked on notifications!");
+    //alert("You clicked on notifications!");
 };
 
 clickActions["next-week"] = function (e) {
@@ -260,6 +275,8 @@ clickActions["next-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
+    
+    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
 };
 
 clickActions["prev-week"] = function (e) {
@@ -269,6 +286,8 @@ clickActions["prev-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
+    
+    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
 };
 
 //Jump to current week
@@ -282,6 +301,8 @@ clickActions["current-week"] = function (e) {
 
     clearWeekSlots();
     loadTemplate();
+    
+    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
 };
 
 //Day Column Expand/Contract function
@@ -309,6 +330,8 @@ clickActions["day-slot"] = function (e) {
             $(this).hide();
         });
     }
+   
+    //e.stopImmediatePropagation();
 };
 
 clickActions["exit-day-slot"] = function (e) {
@@ -390,6 +413,56 @@ function toggleExpansion(element) {
     }
 }
 
+var hammer = new Hammer(document.getElementById("WeekdayContainer"),{
+	recognizers: [
+		[Hammer.Swipe,{ direction: Hammer.DIRECTION_HORIZONTAL }],
+	]
+});
+hammer.options.domEvents=true;
+                        
+hammer.on("swipeleft swiperight", function (ev) {
+    
+    console.log(ev.type + " detected");//debug
+    
+    var currItem = $WeekdayContainer.find(".colorFrameBase.expandedCol");
+    if(currItem.length > 0) //technically this should only be 1 item, the expanded item...
+    {
+        var currentSlotName = currItem.attr("id");
+        var currentSlotNumber = Number(currentSlotName[currentSlotName.length-1]); //Might return NaN if used incorrectly
+        //Detect type of swipe
+        switch(ev.type)
+        {
+            //go to next day
+            case "swiperight":
+                if(currentSlotNumber >= 7)//Wrap to beginning
+                    {
+                        $("#"+currentSlotName.substr(0, currentSlotName.length-1)+1).click();
+                    }
+                else
+                {
+                    currentSlotNumber++;
+                    $("#"+currentSlotName.substr(0, currentSlotName.length-1)+currentSlotNumber).click();
+                }
+                
+                break;
+            case "swipeleft"://previous day
+                if(currentSlotNumber <= 1)//Wrap to end
+                    {
+                        $("#"+currentSlotName.substr(0, currentSlotName.length-1)+7).click();
+                    }
+                else
+                    {
+                        currentSlotNumber--;
+                        $("#"+currentSlotName.substr(0, currentSlotName.length-1)+currentSlotNumber).click();
+                    }
+                break;
+            default: //Some other swipe or action
+                break;
+        }
+    }
+    
+});
+
 //reverts all columns to their normal view
 function frameNormalizeAll() {
     //revert everything to default
@@ -398,6 +471,7 @@ function frameNormalizeAll() {
         $(this).removeClass("expandedCol");
     });
 
+    //small fade effect
     $WeekdayContainer.find(".colorFrameBase").each(function (elem) {
         $(this).find(".contentShortContainer").each(function (i) {
             $(this).fadeIn("fast");
@@ -440,15 +514,11 @@ function displayWeekTop(dateObject) {
 
 }
 
-
+//Day slot template load
 function loadTemplate() {
-    //TODO: dynamically load in html templates for vertical day slice
-    //Use jquery.load( "path/file.html #toSelector");
-    //$WeekdayContainer.load("HTML/Template01.html");
 
     //Load template once
     var rawHtml = $("#Template01").text();
-
 
     //Append divs with IDs containing daySlot followed by #
     for (var i = 1; i <= 7; i++) {
@@ -463,26 +533,19 @@ function loadTemplate() {
         //each day slot gets loaded up with a template
         var $tempDaySlot = $("#daySlot" + i);
 
-        //Load// Edit: 7 calls to server doesn't make sense, why not call
-        //once outside loop and reuse template?
-        //         $tempDaySlot.load("HTML/Template01.html", 
-        //         fadeInElement($tempDaySlot));
-
-        //Alternative load, template from script, select from script ID
-        //        var rawHtml = $("#Template01").text();
-        //        $tempDaySlot.html(rawHtml);
-
         //Alternative to fadeInElement function, direct chain callback
         $tempDaySlot.html(rawHtml).hide().fadeIn("slow", function () {
-            //            postColorFix();
+            //            ColorFix();
 
         });
 
         $tempDaySlot.css("zIndex", 8 - i);
     }
 
+    //Initialize the color of the container
     ColorFix();
 
+    //New elements added inside so hide them
     initialHiddenElements();
 
 }
@@ -498,7 +561,7 @@ function initialHiddenElements() {
 
         //if($(this).data("visible") == false)
 
-        //Hide these until we 
+        //Hide these until we actually need them
         $(this).hide();
         $(this).data("visible", false);
 
@@ -543,7 +606,7 @@ function ColorFix() {
             $top.attr("data-dayValue", momentCalc.format("dddd"));
 
             if (momentCurrent.isSame(momentCalc)) {
-                $top.addClass("border border-info rounded");
+                $top.addClass("border border-primary rounded text-primary");
             }
 
             //Reset for the next iteration
@@ -559,6 +622,7 @@ function ColorFix() {
     });
 }
 
+//Toggles nav night mode
 function toggleNightMode() {
     // store colors
     if ($("#nightMode").is(":checked")) {
@@ -571,6 +635,7 @@ function toggleNightMode() {
     loadSettings();
 }
 
+//Local settings for nightmode
 function loadSettings() {
     // set colors from local storage
     var bgc = localStorage.getItem("backgroundColor");
@@ -589,6 +654,7 @@ function loadSettings() {
     }
 }
 
+//Reset local settings
 function resetSettings() {
     $("#nightMode").prop("checked", false);
     localStorage.setItem("backgroundColor", backgroundColor[0]);

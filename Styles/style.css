@@ -12,9 +12,26 @@ html, body {
     color: rgb(0, 0, 0);
 }
 
+@media only screen and (max-width:700px) {
 /*affect only nav li elements*/
 nav li {
+        font-size: 1em;
+    
+    -webkit-transition: font-size 0.2s ease-out;
+    -moz-transition: font-size 0.2s ease-out;
+    transition: font-size 0.2s ease-out;
+    }
+}
+
+@media only screen and (min-width: 700px)
+{
+nav li {
     font-size: 2em;
+
+    -webkit-transition: font-size 0.2s ease-out;
+    -moz-transition: font-size 0.2s ease-out;
+    transition: font-size 0.2s ease-out;
+    }
 }
 
 #userIcon {
