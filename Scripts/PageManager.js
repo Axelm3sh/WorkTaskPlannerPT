@@ -96,6 +96,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 //GET All Notes for the week, populate the slots
 function getAllNotes(year, weekNumber, noteCollectionRef) {
     
+    console.log("trying to get notes from: "+ year + "-" + weekNumber);
       noteCollectionRef.doc(year + "-" + weekNumber).get().then(function (docs) { //At this level we're reading the document
           if(docs.exists)
           {
@@ -180,23 +181,47 @@ function postNotesByDay(content)
                 contentObj[day].isChecked.push( false );
             }
 
-            contentObj[day].dueDate.push( $(this).data("duedate") );
+            //Firebase doesn't like null/undefined data
+            if(!isNullOrWhitespace($(this).data("duedate"))) 
+            {
+                contentObj[day].dueDate.push( $(this).data("duedate") );
+            }
+            else
+            {
+                contentObj[day].dueDate.push("none");
+            }
         }
         
     });
 
     //console.log("day contents is: ", contentObj);
-    
-    fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-    userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj)
-    .then(function()
+    if(contentObj[day].content.length > 0)
     {
-        console.log("successfully updated notes!");
-    })
-    .catch(function(err)
+        fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+        userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj)
+        .then(function()
+        {
+            console.log("successfully updated notes!");
+        })
+        .catch(function(err)
+        {
+            alert("Error occured while Writing notes: ", err);
+        });
+    }
+    else
     {
-        alert("Error occured while Writing notes: ", err);
-    });
+        //should delete the field
+        fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+        userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week())
+            .update({day: fireDB.FieldValue.delete()})
+            .then(function()
+                 {
+            console.log("Successful deletetion of ", day);
+            
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
     
 }
 
@@ -276,7 +301,7 @@ clickActions["next-week"] = function (e) {
     clearWeekSlots();
     loadTemplate();
     
-    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
+    getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
 };
 
 clickActions["prev-week"] = function (e) {
@@ -287,7 +312,7 @@ clickActions["prev-week"] = function (e) {
     clearWeekSlots();
     loadTemplate();
     
-    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
+    getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
 };
 
 //Jump to current week
@@ -302,7 +327,7 @@ clickActions["current-week"] = function (e) {
     clearWeekSlots();
     loadTemplate();
     
-    getAllNotes(momentInstance.year, momentInstance.week, userNotesCollection);
+    getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
 };
 
 //Day Column Expand/Contract function
