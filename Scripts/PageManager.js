@@ -210,10 +210,18 @@ function postNotesByDay(content)
     }
     else
     {
+        //We'll just use an empty BUT NOT UNDEFINED(?) object
+        var delObj = {};
+        delObj[day] = {
+            content: [],
+            isChecked: [],
+            dueDate: []
+        };
+        
         //should delete the field
         fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
         userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week())
-            .update({day: fireDB.FieldValue.delete()})
+            .update( delObj )
             .then(function()
                  {
             console.log("Successful deletetion of ", day);
@@ -222,6 +230,30 @@ function postNotesByDay(content)
             console.log(err);
         });
     }
+    
+////FieldValue.delete() can only delete top level of data structure....    
+//    else
+//    {
+//        var delObj = {};
+//        
+//        delObj[day] = {
+//            content: firebase.firestore.FieldValue.delete(),
+//            isChecked: firebase.firestore.FieldValue.delete(),
+//            dueDate: firebase.firestore.FieldValue.delete()
+//        };
+//        
+//        //should delete the field
+//        fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+//        userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week())
+//            .update( delObj )
+//            .then(function()
+//                 {
+//            console.log("Successful deletetion of ", day);
+//            
+//        }).catch(function (err) {
+//            console.log(err);
+//        });
+//    }
     
 }
 
