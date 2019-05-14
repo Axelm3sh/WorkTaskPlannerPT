@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>TWORKER</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="Styles/style.css">
     <link rel="stylesheet" href="Styles/ColorContainers.css">
 
@@ -31,8 +32,8 @@
         <!--        User login icon and notification-->
         <div class="nav justify-content-right">
             <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
-            <button type="button" data-click="notification" class="btn btn-outline-secondary btn-sm">
-                <span class="fa fa-comment badge badge-danger"> 9</span>
+            <button type="button" data-click="notification" data-toggle="modal" href="#statsModal" class="btn btn-outline-secondary btn-sm">
+                <span class="fa fa-bar-chart badge badge-danger"> 9</span>
             </button>
 
             <!--            User Icon which toggles a dropdown for generic user options-->
@@ -41,7 +42,7 @@
             </a>
             <!--Dropdown menu for use with the user icon-->
             <div class="dropdown-menu dropdown-menu-right" id="userDropdownMenu" aria-labelledby="userIconDrop">
-                <a class="dropdown-item" href="stats.html"><span class="fa fa-bar-chart"></span> Personal Stats</a>
+<!--                <a class="dropdown-item" href="stats.html"><span class="fa fa-bar-chart"></span> Personal Stats</a>-->
                 <a class="dropdown-item" data-toggle="modal" href="#settingModal"><span class="fa fa-gear"></span> Settings</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" href="#logoutModal">Logout</a>
@@ -101,6 +102,28 @@
 
         </div>
     </div>
+    <!--    Stats Modal -->
+    <div class="modal fade" id="statsModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Statistics</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                     
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
     <!--   A Container for all the main weekday stuff-->
@@ -120,13 +143,15 @@
 <!--    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-firestore.js"></script>-->
     <script src="Scripts/init-firebase.js"></script>
 
-    <!--Bootstrap+JQUERY-->
+    <!--Bootstrap+JQUERY+Hammer+Moment+Datepicker-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/color/jquery.color-2.1.2.js" integrity="sha256-1Cn7TdfHiMcEbTuku97ZRSGt2b3SvZftEIn68UMgHC8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+
     <script src="Scripts/PageManager.js"></script>
     <script src="Scripts/LoginHandler.js"></script>
 
@@ -143,11 +168,11 @@
         </div>
         <div class="colorFrameContent card-body">
 
-            <div class="contentShortContainer" data-visible="true">My super cool abbreviated list of stuff will go here</div>
+            <div class="contentShortContainer" data-visible="true">No tasks made.</div>
             <div class="dropdown-divider"></div>
             <!--            -->
-            <div class="contentExpandedContainer float-right" data-visible="false">
-                <a class="btn btn-outline-primary" role=button data-click="add-item">Add New Item <span class="fa fa-plus-circle"></span></a>
+            <div class="contentExpandedContainer" data-visible="false">
+                <a id="addButton" class="btn btn-primary float-right" role=button data-click="add-item"><span class="fa fa-plus-circle fa-lg"></span></a>
             </div>
         </div>
         <div class="colorFrameBottom">
@@ -168,11 +193,13 @@
     <script type="text/html" id="itemTaskTemplate">
         <div class="contentExpandedContainer entry input-group" data-visible="false">
             <div class="input-group-prepend">
-                <input type="checkbox" aria-label="checkbox for item" class="entryCheckbox" data-click="check-item">
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="checkbox for item" class="entryCheckbox" data-click="check-item">
+                </div>
             </div>
-            <textarea class="form-control" type="text" placeholder="Test Item! Put Text Here."></textarea>
+            <textarea class="form-control" type="text" placeholder="Type Your Task or Note!"></textarea>
             <div class="input-group-append">
-                <button id="save-item" class="btn btn-outline-info" data-click="save-item" type="button"><span class="fa fa-save"></span></button>
+                <button id="due-date" class="btn btn-outline-secondary" data-date="0d"><span class="fa fa-calendar"></span></button>
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
         </div>

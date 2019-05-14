@@ -18,7 +18,7 @@ function GAuthPopup() {
         // The signed-in user info.
         var user = result.user;
         // ...
-        alert("successful login");
+//        alert("successful login");
         window.location.href = "app.html";
 
     }).catch(function (error) {
