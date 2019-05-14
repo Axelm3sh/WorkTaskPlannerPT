@@ -43,11 +43,11 @@ firebase.auth().onAuthStateChanged(function (user) {
         // User is signed in.
         console.log("user signed in");
         user.providerData.forEach(function (profile) {
-            console.log("Sign-in provider: " + profile.providerId);
-            console.log("  Provider-specific UID: " + profile.uid);
-            console.log("  Name: " + profile.displayName);
-            console.log("  Email: " + profile.email);
-            console.log("  Photo URL: " + profile.photoURL);
+//            console.log("Sign-in provider: " + profile.providerId);
+//            console.log("  Provider-specific UID: " + profile.uid);
+//            console.log("  Name: " + profile.displayName);
+//            console.log("  Email: " + profile.email);
+//            console.log("  Photo URL: " + profile.photoURL);
 
             //swap default place holder icon with actual account photo
             $("#userIcon").attr("src", profile.photoURL);
@@ -56,7 +56,8 @@ firebase.auth().onAuthStateChanged(function (user) {
             if (checkDB()) {
                 //                fireDB = firebase.database(); //OMG WRONG API NO WONDER
                 fireDB = firebase.firestore();
-       
+                
+                //Initialize first time run
                 fireDB.collection("users").doc(profile.uid).get()
                     .then(function (dbUserDoc) {
                         //Checks if the document (the user directory) exists
@@ -102,7 +103,7 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
           {
               var currWeekData = docs.data();
               
-              console.log(currWeekData.friday);
+              //console.log(currWeekData.friday);
               //iterate thru afdsgh
               var itemTemplate = $("#itemTaskTemplate").text();
               
@@ -113,21 +114,25 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
                   var day = $(this).siblings(".colorFrameTop").attr("data-dayValue").toLowerCase();
                   var $contentContainer = $(this);
                   
-                  $.each(currWeekData[day].content, function(cIndex, cItem){
-                      
-                      //Get button's parent and follow the same procedure as add-item
-                      $contentContainer.find("#addButton").parent().before(itemTemplate);
-                      //using the itemTemplate, insert then select the new element and populate with data(contentItem)...
-                      var $newestEntry = $contentContainer.find(".contentExpandedContainer.entry").last();
-                      
-                      //Text
-                      $newestEntry.children("textarea").val(cItem);
-                      //Check box
-                      $newestEntry.find("input").prop("checked", currWeekData[day].isChecked[cIndex]);
-                      //Due Date
-                      $newestEntry.attr("data-dueDate", currWeekData[day].dueDate[cIndex]);
-                      
-                  }); //Inner content populate
+                  //If the day was not filled with data, we can skip...
+                  if(currWeekData[day] != undefined)
+                  {
+                      $.each(currWeekData[day].content, function(cIndex, cItem){
+
+                          //Get button's parent and follow the same procedure as add-item
+                          $contentContainer.find("#addButton").parent().before(itemTemplate);
+                          //using the itemTemplate, insert then select the new element and populate with data(contentItem)...
+                          var $newestEntry = $contentContainer.find(".contentExpandedContainer.entry").last();
+
+                          //Text
+                          $newestEntry.children("textarea").val(cItem);
+                          //Check box
+                          $newestEntry.find("input").prop("checked", currWeekData[day].isChecked[cIndex]);
+                          //Due Date
+                          $newestEntry.attr("data-dueDate", currWeekData[day].dueDate[cIndex]);
+
+                      }); //Inner content populate
+                  }
                   
                   //Restore previous progress
                   updateProgressBar($contentContainer);
@@ -197,8 +202,8 @@ function postNotesByDay(content)
     //console.log("day contents is: ", contentObj);
     if(contentObj[day].content.length > 0)
     {
-        fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
-        userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).update(contentObj)
+        //Merge allows us to create a new document for storage and not overwrite previously exisiting data
+        userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week()).set(contentObj, {merge:true})
         .then(function()
         {
             console.log("successfully updated notes!");
@@ -219,7 +224,7 @@ function postNotesByDay(content)
         };
         
         //should delete the field
-        fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
+        //fireDB.collection("users/" + firebase.auth().currentUser.providerData[0].uid + "/notes")
         userNotesCollection.doc(momentInstance.year()+"-"+ momentInstance.week())
             .update( delObj )
             .then(function()
@@ -231,7 +236,7 @@ function postNotesByDay(content)
         });
     }
     
-////FieldValue.delete() can only delete top level of data structure....    
+////Firestore FieldValue.delete() can only delete top level of data structure....    
 //    else
 //    {
 //        var delObj = {};
@@ -257,11 +262,9 @@ function postNotesByDay(content)
     
 }
 
-function firstTimeInitializeUser(currYear, currWeek, userProfile) {
-    fireDB.collection("users").doc(userProfile.uid).set({
-        email: userProfile.email
-    });
-
+//Initializes a blank week document
+function initWeekDoc(currYear, currWeek, userProfile)
+{
     //Blank fields for the content
     var initDoc = {
         sunday: {content: [], isChecked: [], dueDate: []},
@@ -275,6 +278,15 @@ function firstTimeInitializeUser(currYear, currWeek, userProfile) {
     
     //var test = initDoc["sunday"]["isChecked"][0];
     fireDB.collection("users").doc(userProfile.uid).collection("notes").doc(currYear+"-"+currWeek).set(initDoc);
+}
+
+function firstTimeInitializeUser(currYear, currWeek, userProfile) {
+    fireDB.collection("users").doc(userProfile.uid).set({
+        email: userProfile.email
+    });
+
+    //Create the blank document for this week
+    initWeekDoc(currYear, currWeek, userProfile);
 }
 
 //Checks to see if the reference to the DB is set or not, returns false if current user is not authenticated or when the refernce is not set. Otherwise it is true.
@@ -328,6 +340,8 @@ clickActions["notification"] = function (e) {
 clickActions["next-week"] = function (e) {
     //alert("You clicked on next week!");
 
+    closeOpenNotes();
+    
     displayWeekTop(momentInstance.add(7, "days"));
 
     clearWeekSlots();
@@ -339,6 +353,8 @@ clickActions["next-week"] = function (e) {
 clickActions["prev-week"] = function (e) {
     //alert("You clicked on prev week!");
 
+    closeOpenNotes();
+    
     displayWeekTop(momentInstance.subtract(7, "days"));
 
     clearWeekSlots();
@@ -350,6 +366,8 @@ clickActions["prev-week"] = function (e) {
 //Jump to current week
 clickActions["current-week"] = function (e) {
 
+    closeOpenNotes();
+    
     displayWeekTop(momentCurrent);
 
     //Reset momentInstance via explicit clone because add/sub operations persist from other functions.
@@ -401,6 +419,9 @@ clickActions["exit-day-slot"] = function (e) {
     
     //when we close the current day, write the notes to the DB
     postNotesByDay($currSlot);
+    
+    //Inner code uses the children of the slot to find closest
+    updateProgressBar($currSlot);
 
     //toggleExpansion($currSlot);
     frameNormalizeAll();
@@ -468,6 +489,12 @@ function toggleExpansion(element) {
     {
         frameExpansion($target);
     }
+}
+
+//Function call that clicks the exit button of an open day
+function closeOpenNotes()
+{
+    $WeekdayContainer.find(".expandedCol").find(".colorFrameTop").find("span").click();
 }
 
 var hammer = new Hammer(document.getElementById("WeekdayContainer"),{
@@ -722,19 +749,49 @@ function resetSettings() {
 // updates progress bar after adding item, removing item, and checking item
 function updateProgressBar(target) {
 
-    if (target.attr("id") == "remove-item") {
+    if (target.attr("id") == "remove-item") 
+    {
         target = $(".expandedCol .colorFrameContent");
     }
 
-    var totalEntries = target.closest(".colorFrameContent").find(".entryCheckbox").length;
-    var checkedEntries = target.closest(".colorFrameContent").find(".entryCheckbox:checked").length;
-    var progressbar = target.closest(".colorFrameContent").siblings().find(".progress-bar");
+    var statusText = "No tasks made.";
+    
+    var $statusTarget = target.closest(".colorFrameContent");
+    
+    //Find entries in the slot
+    var totalEntries = $statusTarget.find(".entryCheckbox").length;
+    var checkedEntries = $statusTarget.find(".entryCheckbox:checked").length;
+    if(totalEntries > 0)
+    {
+        if(checkedEntries != totalEntries)
+        {
+            var unfinished = totalEntries - checkedEntries;
+            if(unfinished > 1)
+            {
+                statusText = "<strong class=\"text-dark\">You have " + unfinished + " unfinished tasks!</strong>";
+            }
+            else
+            {
+                statusText = "<strong>You have " + unfinished + " unfinished task!</strong>";
+            }
+        }
+        else
+        {
+            statusText = "<strong class=\"text-success\">All tasks completed! Hurray!</strong>";
+        }
+    }
+    
+    //Convert to percentage for progress bar
+    var progressbar = $statusTarget.siblings().find(".progress-bar");
     var percent = checkedEntries / totalEntries * 100;
     if (isNaN(percent)) //no items in list
     {
         percent = 0;
     }
-
+    
+    //Update the abbreviated status panel
+    $statusTarget.find(".contentShortContainer").html(statusText);
+    
     progressbar.attr("aria-valuenow", '"' + percent + '"');
     progressbar.css("width", percent + "%");
 }
