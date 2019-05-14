@@ -38,6 +38,7 @@ header ul {
     max-width: 400px;
     padding: 20px;
     margin: auto;
+    font-size: 1.4em;
     /* background-color: rgba(0, 0, 0, 0.5); */
 }
 
@@ -64,4 +65,5 @@ header ul {
 
 #about {
     height: 280px;
+    font-size: 1.4em;
 }

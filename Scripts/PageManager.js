@@ -16,8 +16,8 @@ var userNotesCollection;
 
 
 //color arrays
-var defaultColorAR = ["#3e9ce9", "#e98b3e", "#14d19e", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
-var complementColorAR = ["#97cdf4", "#f6c555", "#99f299", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
+var defaultColorAR = ["#3e9ce9", "#e98b3e", "#48992f", "#e9593e", "#5d65ef", "#a81fff", "#ea63b0"];
+var complementColorAR = ["#97cdf4", "#f6c555", "#a2e28e", "#e8a09c", "#a3a6f6", "#db85ff", "#ed91c7"];
 var backgroundColor = ["#ffffff", "#2d2d2d"];
 var textColor = ["#000000", "#ffffff"];
 
@@ -694,7 +694,7 @@ function ColorFix() {
             $top.attr("data-dayValue", momentCalc.format("dddd"));
 
             if (momentCurrent.isSame(momentCalc)) {
-                $top.addClass("border border-primary rounded text-primary");
+                $top.addClass("border border-white rounded text-white");
             }
 
             //Reset for the next iteration
