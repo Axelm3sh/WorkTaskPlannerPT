@@ -518,6 +518,7 @@ hammer.on("swipeleft swiperight", function (ev) {
         {
             //go to next day
             case "swiperight":
+                closeOpenNotes();
                 if(currentSlotNumber >= 7)//Wrap to beginning
                     {
                         $("#"+currentSlotName.substr(0, currentSlotName.length-1)+1).click();
@@ -530,6 +531,7 @@ hammer.on("swipeleft swiperight", function (ev) {
                 
                 break;
             case "swipeleft"://previous day
+                closeOpenNotes();
                 if(currentSlotNumber <= 1)//Wrap to end
                     {
                         $("#"+currentSlotName.substr(0, currentSlotName.length-1)+7).click();
