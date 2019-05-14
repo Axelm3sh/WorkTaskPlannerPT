@@ -139,6 +139,8 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
                   
               }); //Day Slot populate   
               
+                //reset calendar functionality
+                reapplyAllCalendarDropdown();
                 //Load and hide...again
                 initialHiddenElements();
           }
@@ -149,7 +151,7 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
           
     })
     .catch(function(error) {
-          alert("Error fetching notes: ", error);
+          alert("Error fetching notes: " + error);
       });
     
 }
@@ -450,11 +452,11 @@ clickActions["add-item"] = function (e) {
 //    $target.closest(".colorFrameContent").append(itemTemplate);
     $target.parent().before(itemTemplate);
 
-    e.stopImmediatePropagation();
-
     calendarDropdown();
 
     updateProgressBar($target);
+    
+    e.stopImmediatePropagation();    
 };
 
 //Removing item row
@@ -813,5 +815,27 @@ function calendarDropdown() {
 
         // add date attribute to container
         calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
+    });
+}
+
+function reapplyAllCalendarDropdown()
+{
+    $WeekdayContainer.find(".fa.fa-calendar").parent()
+        .each(function(index, item)
+          {
+        var calendar = $(item);
+        
+        calendar.datepicker({
+            format: "yyyy-mm-dd",
+            todayHighlight: true,
+            clearBtn: true,
+            startDate: "0d"
+        }).on("changeDate", function (ev) {
+            var strDate = ev.date.toISOString();
+            strDate = strDate.substring(0, strDate.indexOf("T"));
+
+            // add date attribute to container
+            calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
+        });
     });
 }
