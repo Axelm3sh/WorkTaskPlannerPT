@@ -215,9 +215,9 @@ function getUpcomingNotes() {
                 var $noteCounter = $("#notification-counter");
                 
                 $noteCounter.html(" " + notifyTotal);
-                $noteCounter.removeClass(".fa-comment");
+                $noteCounter.removeClass("fa-comment");
                 $noteCounter.removeClass("badge-light");
-                $noteCounter.addClass(".fa-commenting");
+                $noteCounter.addClass("fa-commenting");
                 $noteCounter.addClass("badge-danger");
                 
                 $notificationBody.empty();
