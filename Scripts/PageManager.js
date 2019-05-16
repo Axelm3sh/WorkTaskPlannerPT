@@ -70,7 +70,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                             //get all notes for the week
                             getAllNotes(momentCurrent.year(), momentCurrent.week(), userNotesCollection);
                             
-                            
+                            getUpcomingNotes();
                             //can also get provider's uid from //firebase.auth().currentUser.providerData[0].uid
 
 
@@ -96,11 +96,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 //GET All Notes for the week, populate the slots
 function getAllNotes(year, weekNumber, noteCollectionRef) {
-    
+    //ConsoleDebug
     console.log("trying to get notes from: "+ year + "-" + weekNumber);
+    //Access Firebase firestore DB
       noteCollectionRef.doc(year + "-" + weekNumber).get().then(function (docs) { //At this level we're reading the document
           if(docs.exists)
           {
+              //data from server
               var currWeekData = docs.data();
               
               //console.log(currWeekData.friday);
@@ -110,8 +112,9 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
               $WeekdayContainer.find(".colorFrameContent")
                   .each(function(index){
                   
-                  //Get the day from the topFrame
+                  //Get the day from the .topFrameContent and store
                   var day = $(this).siblings(".colorFrameTop").attr("data-dayValue").toLowerCase();
+                  //Current DOM element day container
                   var $contentContainer = $(this);
                   
                   //If the day was not filled with data, we can skip...
@@ -131,8 +134,8 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
                           //Due Date
                           $newestEntry.attr("data-dueDate", currWeekData[day].dueDate[cIndex]);
 
-                      }); //Inner content populate
-                  }
+                      }); //Inner each - content populate
+                  }//end if
                   
                   //Restore previous progress
                   updateProgressBar($contentContainer);
@@ -154,6 +157,82 @@ function getAllNotes(year, weekNumber, noteCollectionRef) {
           alert("Error fetching notes: " + error);
       });
     
+}
+
+//Should be called only once on login to parse closing dates for notifications
+function getUpcomingNotes() {
+    
+    //Notification Body
+    var $notificationBody = $("#notifyModal").find(".modal-body");
+    var newNotifications = false;
+    var notifyTotal = 0;
+    var notifyArray = [];
+    
+    userNotesCollection.doc(momentCurrent.year() + "-" + momentCurrent.week()).get().then(function (docs) { //At this level we're reading the document
+        if (docs.exists) 
+        {
+            var currWeekData = docs.data();
+            $WeekdayContainer.find(".colorFrameContent").each(function (index) {
+
+                //Get the day from the topFrame
+                var day = $(this).siblings(".colorFrameTop").attr("data-dayValue").toLowerCase();
+                var $contentContainer = $(this);
+
+                var counter = 0;
+                
+                //If the day was not filled with data, we can skip...
+                if (currWeekData[day] != undefined) 
+                {
+                    
+                    $.each(currWeekData[day].dueDate, function (cIndex, cItem) {
+                    
+                        if(cItem != "none" && !currWeekData[day].isChecked[cIndex])
+                        {           
+                            //Is the due date between now and 5 days from now?
+                            if(moment(cItem).isBetween(undefined, moment().day(5)))
+                            {
+                                newNotifications = true;
+                                counter++;
+                            }
+                            
+                        }   
+                    });//end inner each
+                    
+                    if(counter > 0)
+                    {
+                        var insertText = day.toUpperCase() + " contains " + counter;
+                        insertText += (counter > 1 ? " upcoming tasks.<br>" : " upcoming task.<br>");
+
+                        notifyArray.push(insertText);
+                        notifyTotal += counter;
+                    }
+                    
+                }//end if currWeekData[day]                
+            });//end outer each
+            
+            if(newNotifications)
+            {
+                var $noteCounter = $("#notification-counter");
+                
+                $noteCounter.html(" " + notifyTotal);
+                $noteCounter.removeClass(".fa-comment");
+                $noteCounter.removeClass("badge-light");
+                $noteCounter.addClass(".fa-commenting");
+                $noteCounter.addClass("badge-danger");
+                
+                $notificationBody.empty();
+                
+                $.each(notifyArray, function(i, e) 
+                {
+                    e = "<b class=\"text-info\">".concat(e)+"</b>";
+                    $notificationBody.append(e);
+                });
+            }
+            
+        }//end if docs.exists
+    }).catch(function (err) {
+        console.log("Notifications Error: " + err);
+    });
 }
 
 //typically content is the .colorFrameBase of the day slot...
@@ -350,6 +429,8 @@ clickActions["next-week"] = function (e) {
     loadTemplate();
     
     getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
+    
+    getUpcomingNotes();
 };
 
 clickActions["prev-week"] = function (e) {
@@ -363,6 +444,8 @@ clickActions["prev-week"] = function (e) {
     loadTemplate();
     
     getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
+    
+    getUpcomingNotes();
 };
 
 //Jump to current week
@@ -380,6 +463,8 @@ clickActions["current-week"] = function (e) {
     loadTemplate();
     
     getAllNotes(momentInstance.year(), momentInstance.week(), userNotesCollection);
+    
+    getUpcomingNotes();
 };
 
 //Day Column Expand/Contract function
@@ -438,6 +523,8 @@ clickActions["exit-day-slot"] = function (e) {
     $currSlot.find(".contentShortContainer").each(function (index) {
         fadeInElement($(this));
     });
+    
+    getUpcomingNotes();
 
     //Stop it from bubbling up to "daySlot" event
     e.stopImmediatePropagation();
@@ -492,6 +579,59 @@ function toggleExpansion(element) {
         frameExpansion($target);
     }
 }
+
+//clickActions["calendar-dropdown"] = function (e)
+//{
+//    var calendar = $(e.currentTarget);
+//        
+//    var possibleDueDate = calendar.closest(".contentExpandedContainer").data("duedate");
+//                
+//    //Previously defined dates?
+//    if(possibleDueDate != undefined && possibleDueDate != "none")
+//    {
+//        calendar.attr("data-toggle", "tooltip");
+//        calendar.attr("data-placement", "left");
+//        calendar.attr("title", "Due Date: " + possibleDueDate);
+//        calendar.tooltip();
+//    }        
+//
+//    //reference to the expanded container
+//    var $container = calendar.closest(".contentExpandedContainer");
+//
+//    calendar.datepicker({
+//        format: "yyyy-mm-dd",
+//        todayHighlight: true,
+//        clearBtn: true,
+//        startDate: "0d",
+//        autoclose: true       
+//    }).on("changeDate", function (ev) {
+//        var strDate = ev.date.toISOString();
+//        strDate = strDate.substring(0, strDate.indexOf("T"));
+//
+//        var $container = calendar.closest(".contentExpandedContainer");
+//
+//        // add date attribute to container
+//        $container.attr("data-duedate", strDate);
+//
+//        calendar.attr("data-toggle", "tooltip");
+//        calendar.attr("data-placement", "left");
+//        calendar.attr("title", "Due Date: " + strDate);
+//        calendar.tooltip();
+//
+//    });
+//
+//    calendar.datepicker({
+//        format: "yyyy-mm-dd",
+//        todayHighlight: true,
+//        clearBtn: true,
+//        startDate: "0d",
+//        autoclose: true       
+//    }).on("clearDate", function(ev){
+//
+//        dateRemoveTool($container, calendar);
+//
+//    });
+//};
 
 //Function call that clicks the exit button of an open day
 function closeOpenNotes()
@@ -804,20 +944,31 @@ function updateProgressBar(target) {
 function calendarDropdown() {
     var calendar = $(".expandedCol .colorFrameContent #due-date").last();
 
+    var $container = calendar.closest(".contentExpandedContainer");
+    
     calendar.datepicker({
         format: "yyyy-mm-dd",
         todayHighlight: true,
         clearBtn: true,
-        startDate: "0d"
+        startDate: "0d",
+        autoclose: true
     }).on("changeDate", function (ev) {
         var strDate = ev.date.toISOString();
         strDate = strDate.substring(0, strDate.indexOf("T"));
-
+        
         // add date attribute to container
-        calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
+        $container.attr("data-duedate", strDate);
+    });
+    
+    //Hitting clear date, not working for some reason...
+    calendar.datepicker().on("clearDate", function(ev){
+
+        dateRemoveTool($container, calendar);
+        
     });
 }
 
+//The above function but it goes down the DOM and applies calendars
 function reapplyAllCalendarDropdown()
 {
     $WeekdayContainer.find(".fa.fa-calendar").parent()
@@ -825,17 +976,57 @@ function reapplyAllCalendarDropdown()
           {
         var calendar = $(item);
         
+        var possibleDueDate = calendar.closest(".contentExpandedContainer").data("duedate");
+                
+        //Previously defined dates?
+        if(possibleDueDate != undefined && possibleDueDate != "none")
+        {
+            calendar.attr("data-toggle", "tooltip");
+            calendar.attr("data-placement", "left");
+            calendar.attr("title", "Due Date: " + possibleDueDate);
+            calendar.tooltip();
+        }        
+        
+        //reference to the expanded container
+        var $container = calendar.closest(".contentExpandedContainer");
+        
         calendar.datepicker({
             format: "yyyy-mm-dd",
             todayHighlight: true,
             clearBtn: true,
-            startDate: "0d"
+            startDate: "0d",
+            autoclose: true       
         }).on("changeDate", function (ev) {
             var strDate = ev.date.toISOString();
             strDate = strDate.substring(0, strDate.indexOf("T"));
 
+            var $container = calendar.closest(".contentExpandedContainer");
+            
             // add date attribute to container
-            calendar.closest(".contentExpandedContainer").attr("data-duedate", strDate);
+            $container.attr("data-duedate", strDate);
+            
+            calendar.attr("data-toggle", "tooltip");
+            calendar.attr("data-placement", "left");
+            calendar.attr("title", "Due Date: " + strDate);
+            calendar.tooltip();
+            
         });
+        
+        //Not being called for some reason....
+        calendar.datepicker().on("clearDate", function(ev){
+            
+            dateRemoveTool($container, calendar);
+            
+        });
+        
     });
+}
+
+function dateRemoveTool($container, calendar) {
+    $container.removeAttr("data-duedate");
+
+    calendar.tooltip("destroy");
+    calendar.removeAttr("data-toggle");
+    calendar.removeAttr("data-placement");
+    calendar.removeAttr("title");
 }

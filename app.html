@@ -32,11 +32,9 @@
         <!--        User login icon and notification-->
         <div class="nav justify-content-right">
             <!--            Notification Icons for important stuff, will be paired with some update routine maybe-->
-<!--
-            <button type="button" data-click="notification" data-toggle="modal" href="#statsModal" class="btn btn-outline-secondary btn-sm">
-                <span class="fa fa-bar-chart badge badge-danger"> 9</span>
+            <button type="button" data-click="notification" data-toggle="modal" href="#notifyModal" class="btn btn-outline-secondary btn-sm">
+                <span id="notification-counter" class="fa fa-comment badge badge-light"> </span>
             </button>
--->
 
             <!--            User Icon which toggles a dropdown for generic user options-->
             <a class="nav-item dropdown-toggle" id="userIconDrop" role="button" data-toggle="dropdown">
@@ -105,19 +103,19 @@
         </div>
     </div>
     <!--    Stats Modal -->
-    <div class="modal fade" id="statsModal" role="dialog">
+    <div class="modal fade" id="notifyModal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Statistics</h5>
+                    <h5 class="modal-title">Notifications</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                     
+                     No new notifications...
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -201,7 +199,7 @@
             </div>
             <textarea class="form-control" type="text" placeholder="Type Your Task or Note!"></textarea>
             <div class="input-group-append">
-                <button id="due-date" class="btn btn-outline-secondary" data-date="0d"><span class="fa fa-calendar"></span></button>
+                <button id="due-date" data-click="calendar-dropdown" class="btn btn-outline-secondary" data-date="0d"><span class="fa fa-calendar"></span></button>
                 <button id="remove-item" class="btn btn-outline-secondary" data-click="remove-item" type="button"><span class="fa fa-trash"></span></button>
             </div>
         </div>
